@@ -1,1 +1,1 @@
-filetuple = "N/A", 'tboi.jpg'
+filetuple = "N/A"

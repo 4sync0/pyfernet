@@ -123,9 +123,9 @@ if "__main__" == __name__:
         
             elif command == "/destroyjson": menu("under construction", False) #DELETES THE JSON FILE, IF THERE IS NO JSON SAVE FILE, PRINT ERROR
 
-            elif command == "/delcache":
+            elif command == "/delvars":
                 menu("deleting variable storage..",  True)
-                #cache will be automatically deleted after script ends, but it is good for when you want to rewrite some variables
+                #fix some errors
 
             elif command == "/changedir":
 
@@ -168,9 +168,9 @@ if "__main__" == __name__:
         "/exit": "save way of exitting",
         "/credits": "the credits",
         "/keyinfo": "prints useful information about the key -> REQUIERS A KEY GENERATED",
-        "/delcache": "deletes all variables created during the sesion",
+        "/delvars": "deletes all variables created during this sesion",
         "/cmds": "prints available commands",
-        "/changedir": "change the directory were the encryption, decryption... files will be stored there, it will also set that same path into the working directory"
+        "/changedir": "change the directory were the encryption, decryption... files will be stored there, new working directory"
     }
     
     menu(None, False) #PRINTDEF=NONE FOR NO PRINT
