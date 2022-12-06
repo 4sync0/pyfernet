@@ -1,0 +1,6 @@
+files on the STORAGE directory can only be executed outside the directory, because every file is being imported taking in mind that every file is in /encryption,
+and not /encryption/STORAGE (linux)
+
+
+
+(i hope I'm being clear lol)

@@ -117,7 +117,9 @@ if "__main__" == __name__:
                 with open("STORAGE/storage_listFILE.py", "a") as f:
                     f.write(f", '{file}'")
 
-            elif command == "/loadjson": menu("under construction", False) #LOADS THE JSON
+            elif command == "/loadjson":
+                from STORAGE import pytojson
+                pytojson.user()
         
             elif command == "/decryptjson": menu("under construction", False) #DECRYPTS USING THE JSON SAVES. PASSING AS KEY, THE INPUT OF THE ID SAVED ON THE JSON
         

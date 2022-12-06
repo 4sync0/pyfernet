@@ -1,1 +1,2 @@
- DEBUG, file_moving.py , 2022-12-02 00:26:42,150, current working directory moved: /home/p4rtypi5/Descargas/encryption/testdir
+this file will be used in the future to place comments to be triggered on certain parts of any script, and to place the real error messages that will be covered by the
+except Exception method

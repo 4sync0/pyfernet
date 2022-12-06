@@ -1,4 +1,4 @@
-import t2l
+from STORAGE import t2l
 import json
 
 #take list from t2l.py, and iterate it to store it to make it a dictionary and then store in a json file
