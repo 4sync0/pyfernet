@@ -9,11 +9,8 @@ storage = {}
 for length in range(len(t2l.keylist)):
     storage[t2l.keylist[length]] = t2l.filelist[length]
 
-#this is what the user will see
-for key, value in storage.items():
-    print(f"key: {key}  |  file: {value}")
-
-
-print("\n")
-
-print(storage)
+#will execute only when called
+def user():
+    #this is what the user will see
+    for key, value in storage.items():
+        print(f"key: {key}  |  file: {value}")

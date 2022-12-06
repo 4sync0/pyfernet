@@ -1,1 +1,1 @@
-keytuple = "N/A"
+keytuple = "N"

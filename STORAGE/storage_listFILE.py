@@ -1,1 +1,1 @@
-filetuple = "N/A"
+filetuple = "N"
