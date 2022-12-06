@@ -7,7 +7,6 @@ from sys import exit
 import json
 from LOGS import logs_setup as logger
 
-
 #encryption api
 if "__main__" == __name__:
     def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
@@ -103,25 +102,26 @@ if "__main__" == __name__:
 
                 except Exception: UnboundLocalError, print("no key generated during this sesion")
             
-            elif command == "/savejson": #will only store the last change made into both "file" and "key" variables
+            elif command == "/save": #will only store the last change made into both "file" and "key" variables
                 #append key tuple
                 with open("STORAGE/storage_listKEY.py", "a") as f:
                     #check if it has the key in bytes or if the user just setted it, so it's not on bytes so it needs no decode
                     if genkey_checkpoint:
                         f.write(f", '{decoded_key}'")
                     elif not genkey_checkpoint:
-                        f.write(f", '{KEY}'")
-                    
+                        f.write(f", '{KEY}'")               
                     
                 #append file tuple
                 with open("STORAGE/storage_listFILE.py", "a") as f:
                     f.write(f", '{file}'")
-
-            elif command == "/loadjson": menu("under construction", False) #LOADS THE JSON
+                                 
+            elif command == "/load":
+                from STORAGE import pytojson
+                pytojson.user()
+    
+            elif command == "/decryptdict": menu("under construction", False) #DECRYPTS USING THE FILE SAVES. PASSING AS KEY, THE INPUT OF THE ID SAVED ON THE JSON
         
-            elif command == "/decryptjson": menu("under construction", False) #DECRYPTS USING THE JSON SAVES. PASSING AS KEY, THE INPUT OF THE ID SAVED ON THE JSON
-        
-            elif command == "/destroyjson": menu("under construction", False) #DELETES THE JSON FILE, IF THERE IS NO JSON SAVE FILE, PRINT ERROR
+            elif command == "/destroydict": menu("under construction", False) #DELETES THE CONTENT INSIDE THE STORAGE FILE, IF THERE IS NO STORAGE SAVE FILE, PRINT ERROR
 
             elif command == "/delvars":
                 menu("deleting variable storage..",  True)

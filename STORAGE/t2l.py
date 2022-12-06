@@ -1,5 +1,5 @@
-import storage_listKEY
-import storage_listFILE
+from STORAGE import storage_listKEY
+from STORAGE import storage_listFILE
 
 
 #key from tuple to list
