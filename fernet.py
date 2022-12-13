@@ -86,8 +86,8 @@ if "__main__" == __name__:
              feel free to use this lil program for any use as long as credits are given
              made with certain modules and packages: sys, os, random and fernet.""")
                 
-            elif command == "/keyinfo":
-                print("your sesion(sometimes information is wrong, look at:README.txt for more info):\n")
+            elif command == "/sesion":
+                print("this sesion:\n")
                 try: 
                     if genkey_checkpoint:
                         print(f"""
@@ -138,14 +138,13 @@ if "__main__" == __name__:
                     logs = f.read()
                 print(logs)
 
-            elif command == "/check": menu("under construction", False) #check if value/key is on the storage dictionary, and if it is, it will print it's value/key
 
             elif command == "/file":
                 try: print(file)
                 
                 except Exception: UnboundLocalError, menu("no file specified", False)
             
-            elif command == "/setkey": #BE CAREFUL, IF YOU PLACE WRONG INFO. YOU'LL GET ERRORs LATER ON
+            elif command == "/setkey": #BE CAREFUL, IF YOU PLACE WRONG INFO. YOU'LL GET ERRORS LATER ON
                 KEY = input("set the key if you've already got one:\n")
                 #check if the key has been generated or setted | true = generated; false = setted
                 genkey_checkpoint = False
@@ -156,10 +155,21 @@ if "__main__" == __name__:
                 elif not genkey_checkpoint:
                     print(KEY)
 
+            elif command == "/tojson":
+                import STORAGE.pytojson
+                #converts the dictionary stored in the storage directory to json file
+                print("json file will get stored in: " + os.getcwd())
+            
+                with open("storage.json", "x") as f: #unknown = file not found/exists
+                    json.dump(STORAGE.pytojson.storage, f, indent=2)
+                #with open("storage.json", "w") as f:
+
+
+            elif command == "/jsonformat": menu("under construction", False)#change the json formatting
 
             else: print("unknown")
 
-    print("||fernet| p4tp5|| v.0.2b\ntry \"/new\" command first to select a file")
+    print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
     commands = {
         "/new": "inputs a new file -> OTHER COMMANDS REQUIRE FROM THIS COMMAND|||RUN FIRST",
         "/genkey": "generates a key for decryption -> REQUIRES A KEY GENERATED FIRST",
