@@ -1,2 +1,1 @@
-#automatic, do not touch
-keytuple = "N"
+keytuple = 'N'

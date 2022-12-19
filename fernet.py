@@ -6,8 +6,9 @@ import os
 from sys import exit
 import json
 from LOGS import logs_setup as logger
+import subprocess
 
-#encryption api
+
 if "__main__" == __name__:
     def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
         if printdef: print(printdef)
@@ -121,7 +122,17 @@ if "__main__" == __name__:
     
             elif command == "/decryptdict": menu("under construction", False) #DECRYPTS USING THE FILE SAVES. PASSING AS KEY, THE INPUT OF THE ID SAVED ON THE JSON
         
-            elif command == "/destroydict": menu("under construction", False) #DELETES THE CONTENT INSIDE THE STORAGE FILE, IF THERE IS NO STORAGE SAVE FILE, PRINT ERROR
+            elif command == "/destroydict":
+                #running the bash script to clear x,y files
+                subprocess.run(["STORAGE/rmdict_cmd.sh"], shell=True)
+                #rewrite to place "N" on the lists to avoid errors while appending values & place the variable again
+                with open("STORAGE/storage_listFILE.py", "w") as f:
+                    f.write("filetuple = 'N'")
+
+                with open("STORAGE/storage_listKEY.py", "w") as f:
+                    f.write("keytuple = 'N'")
+
+                print("successful")
 
             elif command == "/delvars":
                 menu("deleting variable storage..",  True)
@@ -170,7 +181,7 @@ if "__main__" == __name__:
             else: print("unknown")
 
     print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
-    commands = {
+    commands = { #WILL COMPLETE IT LATER
         "/new": "inputs a new file -> OTHER COMMANDS REQUIRE FROM THIS COMMAND|||RUN FIRST",
         "/genkey": "generates a key for decryption -> REQUIRES A KEY GENERATED FIRST",
         "/encrypt": "encrypts a file",
