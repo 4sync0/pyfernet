@@ -5,8 +5,12 @@ from random import randint
 import os
 from sys import exit
 import json
-from LOGS import logs_setup as logger
 import subprocess
+
+#imported files
+from LOGS import logs_setup as logger
+from STORAGE import pytojson
+import file_moving
 
 
 if "__main__" == __name__:
@@ -117,8 +121,7 @@ if "__main__" == __name__:
                     f.write(f", '{file}'")
                                  
             elif command == "/load":
-                from STORAGE import pytojson
-                pytojson.user()
+                pytojson.start(True)
     
             elif command == "/decryptdict": menu("under construction", False) #DECRYPTS USING THE FILE SAVES. PASSING AS KEY, THE INPUT OF THE ID SAVED ON THE JSON
         
@@ -139,8 +142,7 @@ if "__main__" == __name__:
                 #fix some errors
 
             elif command == "/changedir":
-
-                import file_moving
+                file_moving.start()
         
             elif command == "/cwd": print(os.getcwd())
 
@@ -167,12 +169,11 @@ if "__main__" == __name__:
                     print(KEY)
 
             elif command == "/tojson":
-                import STORAGE.pytojson
                 #converts the dictionary stored in the storage directory to json file
                 print("json file will get stored in: " + os.getcwd())
             
                 with open("storage.json", "x") as f: #unknown = file not found/exists
-                    json.dump(STORAGE.pytojson.storage, f, indent=2)
+                    json.dump(pytojson.storage, f, indent=2)
                 #with open("storage.json", "w") as f:
 
 
