@@ -85,11 +85,6 @@ if __name__ == "__main__":
             
                     print(f"succesfully decripted {file}")
                 except Exception: InvalidToken, print("invalid token")
-        
-            elif command == "/credits": print("""
-             Made by P4rtyPi5#6988 -> discord|@p4rtypi5 -> Replit
-             feel free to use this lil program for any use as long as credits are given
-             made with certain modules and packages: sys, os, random and fernet.""")
                 
             elif command == "/sesion":
                 print("this sesion:\n")
@@ -122,9 +117,7 @@ if __name__ == "__main__":
                                  
             elif command == "/load":
                 pytojson.start(True)
-    
-            elif command == "/decryptdict": menu("under construction", False) #DECRYPTS USING THE FILE SAVES. PASSING AS KEY, THE INPUT OF THE ID SAVED ON THE JSON
-        
+
             elif command == "/destroydict":
                 #running the bash script to clear x,y files
                 subprocess.run(["STORAGE/rmdict_cmd.sh"], shell=True)
@@ -150,7 +143,6 @@ if __name__ == "__main__":
                 with open("LOGS/fmLOGS", "r") as f:
                     logs = f.read()
                 print(logs)
-
 
             elif command == "/file":
                 try: print(file)
@@ -185,17 +177,5 @@ if __name__ == "__main__":
             else: print("unknown")
 
     print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
-    commands = { #WILL COMPLETE IT LATER
-        "/new": "inputs a new file -> OTHER COMMANDS REQUIRE FROM THIS COMMAND|||RUN FIRST",
-        "/genkey": "generates a key for decryption -> REQUIRES A KEY GENERATED FIRST",
-        "/encrypt": "encrypts a file",
-        "/decrypt": "decrypts a file -> REQUIRES A KEY GENERATED",
-        "/exit": "save way of exitting",
-        "/credits": "the credits",
-        "/keyinfo": "prints useful information about the key -> REQUIERS A KEY GENERATED",
-        "/delvars": "deletes all variables created during this sesion",
-        "/cmds": "prints available commands",
-        "/changedir": "change the directory were the encryption, decryption... files will be stored there, new working directory"
-    }
     
     menu(None, False) #PRINTDEF=NONE FOR NO PRINT
