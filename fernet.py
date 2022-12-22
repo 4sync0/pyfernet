@@ -13,7 +13,7 @@ from STORAGE import pytojson
 import file_moving
 
 
-if "__main__" == __name__:
+if __name__ == "__main__":
     def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
         if printdef: print(printdef)
         else: pass
@@ -171,11 +171,14 @@ if "__main__" == __name__:
             elif command == "/tojson":
                 #converts the dictionary stored in the storage directory to json file
                 print("json file will get stored in: " + os.getcwd())
-            
-                with open("storage.json", "x") as f: #unknown = file not found/exists
-                    json.dump(pytojson.storage, f, indent=2)
-                #with open("storage.json", "w") as f:
 
+                #destroys last file and rewrites to avoid errors
+                subprocess.run(["rm", "storage.json"])
+
+                pytojson.start(False) #to update the new conent into the storage variable
+
+                with open("storage.json", "x") as f:
+                    json.dump(pytojson.storage, f, indent=2)
 
             elif command == "/jsonformat": menu("under construction", False)#change the json formatting
 
