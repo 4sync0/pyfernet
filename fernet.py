@@ -1,8 +1,8 @@
 print("loading...")
 
+import os
 from cryptography.fernet import Fernet, InvalidToken
 from random import randint
-import os
 from sys import exit
 import json
 import subprocess
@@ -13,8 +13,7 @@ from STORAGE import pytojson
 import file_moving
 
 
-if __name__ == "__main__":
-    def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
+def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
         if printdef: print(printdef)
         else: pass
 
@@ -176,6 +175,6 @@ if __name__ == "__main__":
 
             else: print("unknown")
 
-    print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
+print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
     
-    menu(None, False) #PRINTDEF=NONE FOR NO PRINT
+menu(None, False) #PRINTDEF=NONE FOR NO PRINT
