@@ -38,34 +38,37 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 KEY = Fernet.generate_key()
                 decoded_key = KEY.decode()
 
-                id_num = randint(0, 100)
+                id_num = randint(0, 1000)
+
+                #check if already taken, if taken do again
+                fileK_checking = os.path.exists(f"FERNETKEY{id_num}.txt")
+                if fileK_checking: id_num = randint(0, 1000)
                 
-                print("\nkey & it's id generated..\n")
-                   
+                else: pass
+
                 with open(f"FERNETKEY{id_num}.txt", "wb") as f_key:
                     f_key.write(KEY)
                 
                 #check if the key has been generated or setted | true = generated; false = setted
                 genkey_checkpoint = True
-                    
-                fileK_checking = os.path.exists(f"FERNETKEY{id_num}.txt")
-                if not fileK_checking: os.path.exists("|RANDINT GENERATION REPEATED| try again\n (there is 1 in 100 posibilities of getting this error, I appologize for your bad luck D:), or key limit exceeded (100)")
-                
-                else: print(f"\n->the key that just got generated is unique, use \"/keyinfo\" for more information\n")
 
+                print(f"\n->the key that just got generated is unique, use \"/sesion\" for more information\n")
+                    
             elif command == "/encrypt":
-                #ENCRIPTION
-                fern = Fernet(key=KEY)
-                
-                with open(file, "rb") as raw_f:
-                   origFile = raw_f.read()
-                
-                encrypt = fern.encrypt(origFile)
-                
-                with open(file, "wb") as f:
-                   f.write(encrypt)
-                
-                print("\nsuccesfully encripted: ",file)
+                try:
+                    #ENCRIPTION
+                    fern = Fernet(key=KEY)
+                    
+                    with open(file, "rb") as raw_f:
+                       origFile = raw_f.read()
+                    
+                    encrypt = fern.encrypt(origFile)
+                    
+                    with open(file, "wb") as f:
+                       f.write(encrypt)
+                    
+                    print("\nsuccesfully encripted: ",file)
+                except Exception: ValueError, print("invalid key")
         
             elif command == "/exit":
                 exit("bai")
@@ -102,17 +105,19 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 except Exception: UnboundLocalError, print("no key generated during this sesion")
             
             elif command == "/save": #will only store the last change made into both "file" and "key" variables
-                #append key tuple
-                with open("STORAGE/storage_listKEY.py", "a") as f:
-                    #check if it has the key in bytes or if the user just setted it, so it's not on bytes so it needs no decode
-                    if genkey_checkpoint:
-                        f.write(f", '{decoded_key}'")
-                    elif not genkey_checkpoint:
-                        f.write(f", '{KEY}'")               
-                    
-                #append file tuple
-                with open("STORAGE/storage_listFILE.py", "a") as f:
-                    f.write(f", '{file}'")
+                try:
+                    #append key tuple
+                    with open("STORAGE/storage_listKEY.py", "a") as f:
+                        #check if it has the key in bytes or if the user just setted it, so it's not on bytes so it needs no decode
+                        if genkey_checkpoint:
+                            f.write(f", '{decoded_key}'")
+                        elif not genkey_checkpoint:
+                            f.write(f", '{KEY}'")               
+                        
+                    #append file tuple
+                    with open("STORAGE/storage_listFILE.py", "a") as f:
+                        f.write(f", '{file}'")
+                except Exception: UnboundLocalError, print("no key specified")
                                  
             elif command == "/load":
                 pytojson.start(True)
@@ -139,14 +144,14 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             elif command == "/cwd": print(os.getcwd())
 
             elif command == "/logs":
-                with open("LOGS/fmLOGS", "r") as f:
+                with open("LOGS/logs.log", "r") as f:
                     logs = f.read()
                 print(logs)
 
             elif command == "/file":
                 try: print(file)
                 
-                except Exception: UnboundLocalError, menu("no file specified", False)
+                except Exception: UnboundLocalError, print("no file specified")
             
             elif command == "/setkey": #BE CAREFUL, IF YOU PLACE WRONG INFO. YOU'LL GET ERRORS LATER ON
                 KEY = input("set the key if you've already got one:\n")
@@ -154,10 +159,12 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 genkey_checkpoint = False
             
             elif command == "/key":
-                if genkey_checkpoint:
-                    print(decoded_key)
-                elif not genkey_checkpoint:
-                    print(KEY)
+                try:
+                    if genkey_checkpoint:
+                        print(decoded_key)
+                    elif not genkey_checkpoint:
+                        print(KEY)
+                except Exception: UnboundLocalError, print("no key specified")
 
             elif command == "/tojson":
                 #converts the dictionary stored in the storage directory to json file
