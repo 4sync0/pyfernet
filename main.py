@@ -16,7 +16,9 @@ if __name__ == "__main__":
     try: open("true.txt") #exists, not first time
     except Exception: #doesn't exist, first time, runs alias script
         FileNotFoundError
+        logger.logging.debug("setting alias")
         subprocess.run(["/home/partypie/encryption/alias_setup.sh"], shell=True)
+        
         with open("true.txt", "w") as f:
             f.write("This file exists to check if the script runs for the first time or not, to run alias_setup.sh or only once")
 
