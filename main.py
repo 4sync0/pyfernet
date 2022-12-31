@@ -4,8 +4,10 @@ from os import chdir,  access, X_OK
 import sys
 import subprocess
 import os.path
+import LOGS.logs_setup as logger
 
 if __name__ == "__main__":
+    logger.logging.debug("sesion stated")
     #sets the working directory to wherever this file is
     chdir(os.path.dirname(__file__))
 

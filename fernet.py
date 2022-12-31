@@ -68,9 +68,12 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                        f.write(encrypt)
                     
                     print("\nsuccesfully encripted: ",file)
-                except Exception: ValueError, print("invalid key")
+                    logger.logging.debug(f"{file} encrypted")
+
+                except Exception: ValueError, print("invalid key"), logger.logging.error("ValueError while encryption")
         
             elif command == "/exit":
+                logger.logging.debug("sesion ended")
                 exit("bai")
         
             elif command == "/decrypt":
@@ -86,7 +89,9 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                         decrypted_f.write(decrypted)
             
                     print(f"succesfully decripted {file}")
-                except Exception: InvalidToken, print("invalid token")
+                    logger.logging.debug(f"{file} decrypted")
+
+                except Exception: InvalidToken, print("invalid token"), logger.logging.error("InvalidToken(fernet) while decryption")
                 
             elif command == "/sesion":
                 print("this sesion:\n")
@@ -102,7 +107,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                          usable to decrypt: {file} only
                          stored in: FERNETKEY{id_num}.txt""")
 
-                except Exception: UnboundLocalError, print("no key generated during this sesion")
+                except Exception: UnboundLocalError, print("no key generated during this sesion"), logger.logging.error("UnboundLocalError while loading sesion")
             
             elif command == "/save": #will only store the last change made into both "file" and "key" variables
                 try:
@@ -117,7 +122,10 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     #append file tuple
                     with open("STORAGE/storage_listFILE.py", "a") as f:
                         f.write(f", '{file}'")
-                except Exception: UnboundLocalError, print("no key specified")
+
+                    logger.logging.debug("info saved to storage")
+
+                except Exception: UnboundLocalError, print("no key specified"), print("no key generated during this sesion"), logger.logging.error("UnboundLocalError while saving")
                                  
             elif command == "/load":
                 pytojson.start(True)
@@ -151,7 +159,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             elif command == "/file":
                 try: print(file)
                 
-                except Exception: UnboundLocalError, print("no file specified")
+                except Exception: UnboundLocalError, print("no file specified"), logger.logging.error("UnboundLocalError while loading file")
             
             elif command == "/setkey": #BE CAREFUL, IF YOU PLACE WRONG INFO. YOU'LL GET ERRORS LATER ON
                 KEY = input("set the key if you've already got one:\n")
@@ -164,7 +172,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                         print(decoded_key)
                     elif not genkey_checkpoint:
                         print(KEY)
-                except Exception: UnboundLocalError, print("no key specified")
+                except Exception: UnboundLocalError, print("no key specified"), logger.logging.error("UnboundLocalError while loading key")
 
             elif command == "/tojson":
                 #converts the dictionary stored in the storage directory to json file
@@ -180,6 +188,16 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
             elif command == "/jsonformat": menu("under construction", False)#change the json formatting
 
+            elif command == "/relogs":
+                try:
+                    #destroy logs witht he ultimate power of god (aka bash)
+                    subprocess.run("rm LOGS/logs.log", shell=True)
+                    #then create it back but empty
+                    with open("LOGS/logs.log", "x") as f:
+                        f.write("")
+
+                except Exception: FileNotFoundError, print("file error"), logger.logging.error("FileNotFoundError while relogs")
+                
             else: print("unknown")
 
 print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
