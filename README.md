@@ -12,7 +12,7 @@
 ![build badge](https://img.shields.io/appveyor/build/Party-Pie/pyfernet?color=gold&label=build&logo=AppVeyor&logoColor=yellow)
 <br>
 <br>
-## What's al this?  
+## What's all this?  
 this is a cryptography project built thanks to [the cryptography package](https://pypi.org/project/cryptography/ "cryptography pip package")  
 with this project, you can encrypt any file using [fernet][docfernet] 
 for more information regarding the fernet package, check [their github repo](https://github.com/fernet "fernet package github repo")  
@@ -32,9 +32,40 @@ With [pyfernet][repofernet], you can now do all without wasting time, no knowled
  
  ## Installation Guide  
  This section of the readme file is totally dedicated to the installation of [pyfernet][repofernet], if you follow all the stepts, you should get no errors
- during the process.
+ during the process.  **this 
  <br>
- 1. make sure you have [python](https://en.wikipedia.org/wiki/Python_(programming_language "python wikipedia") and [pip](https://en.wikipedia.org/wiki/Pip_(package_manager) "pip wikipedia") downloaded, if not, download it [**here**](https://www.python.org/ "python web") <sup>(pip should already come with python)</sup>  
- you can check it by running ```python --version``` and ```pip --version```
+ 1. Make sure you have [python](https://en.wikipedia.org/wiki/Python_(programming_language "python wikipedia") and [pip](https://en.wikipedia.org/wiki/Pip_(package_manager) "pip wikipedia") downloaded, if not, download it [**here**](https://www.python.org/ "python web") <sup>(pip should already come with python)</sup>  
+ you can check it by running ```python --version``` and ```pip --version```  
+ 2. [git](https://git-scm.com/ "git website") is required for this step, so make sure you've it installed, once you have [git](https://git-scm.com/ "git website") and [python](https://www.python.org/ "python website") installed, clone this repository by running the following command:  
+ ```git clone https://github.com/Party-Pie/pyfernet.git```  
+ 3. Now, navigate to the root directory of the repository with this command: ```cd pyfernet```  
+ 4. Once there, install the package dependencies which are essential:  ```pip install -r requirements.txt```  
+ 5. And finally, run **main.py**: ```python main.py``` (make sure you're still on the root directory)  
  
- 
+ You're all done! now, every time you want to use [pyfernet][repofernet] you can do so by running ```fernet``` in your terminal.  
+ <br>
+ ## **How to use [pyfernet][repofernet]**
+ Please read this section, specially if it's your first time using [pyfernet][repofernet] as it contains essential information over how to use this.  
+ <br>
+ Once you've gone over the [intallation guide](https://github.com/Party-Pie/pyfernet#installation-guide "README.md installation guide"), you may be wondering how to do use this great tool, don't worry, it's nothing complex, infact, it's pretty simple but do read carefully.  
+  #### Essential commands (you'd run each time you start another sesion)
+ * Firstly, you need to type ```/new``` in order to tell the script which file you're going to be using **during this sesion**
+ * Now, you'll have to either **generate the key** (```/genkey```) or, if you already have a key, (```/setkey```). **Note**: each time you close sesion, none of this info. will save, so you'll need to run these last commands again.  
+ A key are some words and numbers, joint together, which can be used to decrypt or encrypt files. Each file has a unique key.  
+ You can check if there is a key and a file generated/setted running these commands: ```/key``` and ```/file```.  
+#### Other important commands  
+* You can encrypt files with this self-explanatory command: ```/encrypt``` & to decrypt: ```decrypt```  
+* You could also change the current working directory with the ```/changedir``` command, and check it with the ```cwd``` command  
+* **to save encrypted files and keys**, you'll have to follow this steps:  
+   * 1st, save it running the ```/save``` command, this will save the key and file you have encrypted **during that same sesion**  
+   * Then, you can either **load it directly** -> ```/load```, or **save it to a json file** -> ```/tojson``` <sup>(saved in ~encryption/storage.json)</sup>  
+   **In order to delete** the content inside the files where these files & their keys are saved, you'd need to run: ```/destroydict```  
+* You can also **view the debug and error logs** by typing ```/logs``` & destroy it with the ```/relogs``` command  
+* You can **view info about the sesion** running this following command ```/sesion```, **you need to have generated a key during that same sesion**  
+* Another little thing you can do is **deleting the variables** during that same sesion, to do so, type: ```/delvars```  
+* In order to **exit**, you should run, ```/exit```, or hold ctrl+C, but that's only recommended if the script froze.  
+<br>
+<sup>That'd be all for now, appreciate taking your time in reading this</sup>
+  
+Made with love,  
+PartyPie
