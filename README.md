@@ -69,5 +69,4 @@ With [pyfernet][repofernet], you can now do all without wasting time, no knowled
 <br>
 <sup>That'd be all for now, appreciate taking your time in reading this</sup>
   
-Made with love,  
-PartyPie
+Made with love, by PartyPie
