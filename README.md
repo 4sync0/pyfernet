@@ -41,6 +41,8 @@ With [pyfernet][repofernet], you can now do all without wasting time, no knowled
  3. Now, navigate to the root directory of the repository with this command: ```cd pyfernet```  
  4. Once there, install the package dependencies which are essential:  ```pip install -r requirements.txt```  
  5. And finally, run **main.py**: ```python main.py``` (make sure you're still on the root directory)  
+   
+ **every time there's an update**, run the following command: ```git pull```  
  
  You're all done! now, every time you want to use [pyfernet][repofernet] you can do so by running ```fernet``` in your terminal.  
  <br>
