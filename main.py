@@ -17,7 +17,7 @@ if __name__ == "__main__":
     except Exception: #doesn't exist, first time, runs alias script
         FileNotFoundError
         logger.logging.debug("setting alias")
-        subprocess.run(["/home/partypie/encryption/alias_setup.sh"], shell=True)
+        subprocess.run(["/home/partypie/pyfernet/alias_setup.sh"], shell=True)
         
         with open("true.txt", "w") as f:
             f.write("This file exists to check if the script runs for the first time or not, to run alias_setup.sh or only once")
