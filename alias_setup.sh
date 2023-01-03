@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Find the path to the encryption directory
-encryption_dir=$(find ~ -type d -name "encryption" 2>/dev/null | head -n 1)
+encryption_dir=$(find ~ -type d -name "pyfernet" 2>/dev/null | head -n 1)
 
 # Set a permanent alias to run the main.py script in the encryption directory. Powershell, zsh & bash
 if [ "$SHELL" == "/bin/bash" ]
