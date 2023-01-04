@@ -5,8 +5,7 @@
 ### python cryptography fernet    
 ![fernet encryption jpg](https://cdn.pixabay.com/photo/2015/12/13/15/32/cryptographic-1091257_960_720.jpg)  
 <br>
-![maintained badge](https://img.shields.io/maintenance/yes/2022?logo=github&logoColor=gold)
-![commit-rate badge](https://img.shields.io/github/commit-activity/m/Party-Pie/pyfernet?color=gold&label=commit%20rate&logo=git&logoColor=gold)
+![maintained badge](https://img.shields.io/maintenance/yes/2023?logo=github&logoColor=gold)
 ![last-commit badge](https://img.shields.io/github/last-commit/Party-Pie/pyfernet?color=gold&logo=github&logoColor=gold)
 ![discord badge](https://img.shields.io/badge/discord-P4rtyPi5%236988-gold?logo=discord)
 ![build badge](https://img.shields.io/appveyor/build/Party-Pie/pyfernet?color=gold&label=build&logo=AppVeyor&logoColor=yellow)
@@ -56,7 +55,7 @@ With [pyfernet][repofernet], you can now do all without wasting time, no knowled
  A key are some words and numbers, joint together, which can be used to decrypt or encrypt files. Each file has a unique key.  
  You can check if there is a key and a file generated/setted running these commands: ```/key``` and ```/file```.  
 #### Other important commands  
-* You can encrypt files with this self-explanatory command: ```/encrypt``` & to decrypt: ```decrypt```  
+* You can encrypt files with this self-explanatory command: ```/encrypt``` & to decrypt: ```/decrypt```  
 * You could also change the current working directory with the ```/changedir``` command, and check it with the ```cwd``` command  
 * **to save encrypted files and keys**, you'll have to follow this steps:  
    * 1st, save it running the ```/save``` command, this will save the key and file you have encrypted **during that same sesion**  
