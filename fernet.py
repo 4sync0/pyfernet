@@ -143,7 +143,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
             elif command == "/destroydict":
                 #running the bash script to clear x,y files
-                subprocess.run(["STORAGE/rmdict_cmd.sh"], shell=True)
+                subprocess.run(["STORAGE/rmdict_cmd.sh"])
                 #rewrite to place "N" on the lists to avoid errors while appending values & place the variable again
                 with open(compatibility("STORAGE/storage_listFILE.py"), "w") as f:
                     f.write("filetuple = 'N'")
@@ -208,6 +208,9 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                         f.write("")
 
                 except Exception: FileNotFoundError, print("file error"), logger.logging.error("FileNotFoundError while relogs")
+            
+            elif command == "/update":
+                import repo.repo_update
                 
             else: print("unknown")
 
