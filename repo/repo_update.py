@@ -1,6 +1,9 @@
 #checks repo update
 import requests as r
 import subprocess
+import os
+
+#I am aware there are easies ways of doing these type of stuff, but for the sake of "training" Im doing it this way
 
 #get api
 comms = r.get("https://api.github.com/repos/Party-Pie/pyfernet/commits") 
@@ -24,13 +27,19 @@ else:
     #get last update
     subprocess.run("git pull", shell=True)
     #then delete last save
-    subprocess.run("sudo rm repo/lastcheck.txt", shell=True)
+    if os.name() == "posix": #linux & macos
+        subprocess.run("sudo rm repo/lastcheck.txt", shell=True)
+    elif os.name() == "nt":
+        subprocess.run("del repo/lastcheck.txt", shell=True)
     
     #save in file
     with open("repo/lastcheck.txt", "w") as f:
         f.write(last_data)
 
 
-
-#NOTE: make file compatibility for windows
-#NOTE: make an automatic backup for some stuff like the storage.json file
+#check if update
+if last_data != last_onfile:
+    import backup_handler
+else:
+    print("your pyfernet is up to date")
+    pass

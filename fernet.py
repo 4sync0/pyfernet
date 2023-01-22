@@ -12,16 +12,6 @@ from LOGS import logs_setup as logger
 from STORAGE import pytojson
 import file_moving
 
-#for compatibility in files
-def compatibility(linuxFILE: str):
-    #linuxFILE must always use /
-
-    #note, (ignore): no need to use it if running bash scripts, as it supports both \ and / (only for "with open as")
-
-    if platform == "win32": linuxFILE = linuxFILE.replace("/", "\\")
-    #linux and os use / so no change
-    else: pass
-    return linuxFILE
 
 
 def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
@@ -123,7 +113,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             elif command == "/save": #will only store the last change made into both "file" and "key" variables
                 try:
                     #append key tuple
-                    with open(compatibility("STORAGE/storage_listKEY.py"), "a") as f:
+                    with open("STORAGE/storage_listKEY.py", "a") as f:
                         #check if it has the key in bytes or if the user just setted it, so it's not on bytes so it needs no decode
                         if genkey_checkpoint:
                             f.write(f", '{decoded_key}'")
@@ -131,7 +121,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                             f.write(f", '{KEY}'")               
                         
                     #append file tuple
-                    with open(compatibility("STORAGE/storage_listFILE.py"), "a") as f:
+                    with open("STORAGE/storage_listFILE.py", "a") as f:
                         f.write(f", '{file}'")
 
                     logger.logging.debug("info saved to storage")
@@ -145,10 +135,10 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 #running the bash script to clear x,y files
                 subprocess.run(["STORAGE/rmdict_cmd.sh"])
                 #rewrite to place "N" on the lists to avoid errors while appending values & place the variable again
-                with open(compatibility("STORAGE/storage_listFILE.py"), "w") as f:
+                with open("STORAGE/storage_listFILE.py", "w") as f:
                     f.write("filetuple = 'N'")
 
-                with open(compatibility("STORAGE/storage_listKEY.py"), "w") as f:
+                with open("STORAGE/storage_listKEY.py", "w") as f:
                     f.write("keytuple = 'N'")
 
                 print("successful")
@@ -163,7 +153,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             elif command == "/cwd": print(os.getcwd())
 
             elif command == "/logs":
-                with open(compatibility("LOGS/logs.log"), "r") as f:
+                with open("LOGS/logs.log", "r") as f:
                     logs = f.read()
                 print(logs)
 
