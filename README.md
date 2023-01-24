@@ -1,5 +1,5 @@
 [docfernet]: https://cryptography.io/en/latest/fernet/# "fernet pip doc"
-[repofernet]: https://github.com/Party-Pie/pyfernet, "pyfernet github repo"
+[repofernet]: https://github.com/Party-Pie/pyfernet "pyfernet github repo"
 
 # pyfernet
 ### python cryptography fernet    
@@ -40,8 +40,7 @@ With [pyfernet][repofernet], you can now do all without wasting time, no knowled
  3. Now, navigate to the root directory of the repository with this command: ```cd pyfernet```  
  4. Once there, install the package dependencies which are essential:  ```pip install -r requirements.txt```  
  5. And finally, run **main.py**: ```python main.py``` (make sure you're still on the root directory)  
-   
- **every time there's an update**, run the following command: ```git pull```  
+    
  
  You're all done! now, every time you want to use [pyfernet][repofernet] you can do so by running ```fernet``` in your terminal.  
  <br>
@@ -65,7 +64,8 @@ With [pyfernet][repofernet], you can now do all without wasting time, no knowled
 * You can **view info about the sesion** running this following command ```/sesion```, **you need to have generated a key during that same sesion**  
 * Another little thing you can do is **deleting the variables** during that same sesion, to do so, type: ```/delvars```  
 * In order to **exit**, you should run, ```/exit```, or hold ctrl+C, but that's only recommended if the script froze.  
-<br>
+* Another **pretty important** command, would be: ```/update```. This, not only **checks if your [pyfernet][repofernet] clone is outdated and updates it**, but it also does a customized and simple backup of certain files (storage.json, logs.log & true.txt)  
+ <br>
 <sup>That'd be all for now, appreciate taking your time in reading this</sup>
   
 Made with love, by PartyPie
