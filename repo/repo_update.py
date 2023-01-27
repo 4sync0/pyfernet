@@ -27,9 +27,9 @@ else:
     #get last update
     subprocess.run("git pull", shell=True)
     #then delete last save
-    if os.name() == "posix": #linux & macos
+    if os.name == "posix": #linux & macos
         subprocess.run("sudo rm repo/lastcheck.txt", shell=True)
-    elif os.name() == "nt":
+    elif os.name == "nt":
         subprocess.run("del repo/lastcheck.txt", shell=True)
     
     #save in file
@@ -39,7 +39,7 @@ else:
 
 #check if update
 if last_data != last_onfile:
-    import backup_handler
+    import repo.backup_handler
 else:
     print("your pyfernet is up to date")
     pass
