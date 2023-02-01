@@ -64,8 +64,13 @@ With [pyfernet][repofernet], you can now do all without wasting time, no knowled
 * You can **view info about the sesion** running this following command ```/sesion```, **you need to have generated a key during that same sesion**  
 * Another little thing you can do is **deleting the variables** during that same sesion, to do so, type: ```/delvars```  
 * In order to **exit**, you should run, ```/exit```, or hold ctrl+C, but that's only recommended if the script froze.  
-* Another **pretty important** command, would be: ```/update```. This, not only **checks if your [pyfernet][repofernet] clone is outdated and updates it**, but it also does a customized and simple backup of certain files (storage.json, logs.log & true.txt)  
+* Another **pretty important** command, would be: ```/update```. This, not only **checks if your [pyfernet][repofernet] clone is outdated and updates it**, but it also does a customized and simple backup of certain files (storage.json, logs.log & true.txt)
+<br>
+
+## What's coming next?  
+- Multifernet implementation  
  <br>
+   
 <sup>That'd be all for now, appreciate taking your time in reading this</sup>
   
 Made with love, by PartyPie
