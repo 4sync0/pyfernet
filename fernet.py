@@ -1,7 +1,7 @@
 print("loading...")
 
 import os
-from cryptography.fernet import Fernet, InvalidToken
+from cryptography.fernet import Fernet, InvalidToken, MultiFernet
 from random import randint
 from sys import exit, platform
 import json
@@ -22,8 +22,9 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
         else: pass
 
         while True:
-        
-            command: str = input("cmd->\t")
+            if multiQ == True: #to make the user know whether they're on multifernet encryption mode or not
+                command: str = input("m.cmd->\t")
+            else: command: str = input("cmd->\t")
 
             if command == "/new":
                 file: str = input("select file's relative path\tdont forget to place its extension at the end\n-->> ")
@@ -201,9 +202,20 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             
             elif command == "/update":
                 import repo.repo_update
-                
+
+            elif command == "/multi -s":
+                multiQ = True
+                #the main idea is to make a multifernet mode that activates running /multi -s command, when activated, most commands will be modified to work
+                #using multifernet
+            
+            elif command == "/multi -q":
+                #quit multifernet mode
+                multiQ = False
+                pass
+
             else: print("unknown")
 
 print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
+multiQ = False # automatically set to false
     
 menu(None, False) #PRINTDEF=NONE FOR NO PRINT
