@@ -31,7 +31,7 @@ With [pyfernet][repofernet], you can now do all without wasting time, no knowled
  
  ## Installation Guide  
  This section of the readme file is totally dedicated to the installation of [pyfernet][repofernet], if you follow all the stepts, you should get no errors
- during the process.  **this 
+ during the process.  
  <br>
  1. Make sure you have [python](https://en.wikipedia.org/wiki/Python_(programming_language "python wikipedia") and [pip](https://en.wikipedia.org/wiki/Pip_(package_manager) "pip wikipedia") downloaded, if not, download it [**here**](https://www.python.org/ "python web") <sup>(pip should already come with python)</sup>  
  you can check it by running ```python --version``` and ```pip --version```  

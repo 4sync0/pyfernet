@@ -2,6 +2,7 @@
 import requests as r
 import subprocess
 import os
+from LOGS import logs_setup as logger
 
 #I am aware there are easies ways of doing these type of stuff, but for the sake of "training" Im doing it this way
 
@@ -40,6 +41,7 @@ else:
 #check if update
 if last_data != last_onfile:
     import repo.backup_handler
+    logger.logging.debug(f"updated pyfernet. {last_onfile} -> {last_data}")
 else:
     print("your pyfernet is up to date")
     pass
