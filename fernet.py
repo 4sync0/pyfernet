@@ -23,7 +23,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
         while True:
             if multiQ == True: #to make the user know whether they're on multifernet encryption mode or not
-                command: str = input("m.cmd->\t")
+                command: str = input("multi.cmd->\t")
             else: command: str = input("cmd->\t")
 
             if command == "/new":
@@ -36,8 +36,12 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 else: pass
 
             elif command == "/genkey":
-                #main global variables
-                KEY = Fernet.generate_key()
+                if multiQ:
+                    KEY = [Fernet.generate_key(), Fernet.generate_key()]
+                    key_for_file = " and ".join(KEY)
+                else:
+                    KEY = Fernet.generate_key()
+
                 decoded_key = KEY.decode()
 
                 id_num = randint(0, 1000)
@@ -49,7 +53,10 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 else: pass
 
                 with open(f"FERNETKEY{id_num}.txt", "wb") as f_key:
-                    f_key.write(KEY)
+                    if multiQ:
+                        f_key.write(key_for_file)
+                    else:
+                       f_key.write(KEY)
                 
                 #check if the key has been generated or setted | true = generated; false = setted
                 genkey_checkpoint = True
@@ -58,9 +65,11 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     
             elif command == "/encrypt":
                 try:
-                    #ENCRIPTION
-                    fern = Fernet(key=KEY)
-                    
+                    if multiQ:
+                        fern = MultiFernet(KEY)
+                    else:
+                        fern = Fernet(key=KEY)
+                
                     with open(file, "rb") as raw_f:
                        origFile = raw_f.read()
                     
@@ -79,7 +88,15 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 exit("bai")
         
             elif command == "/decrypt":
-                key_inp: str = input("input key:\n")
+                if multiQ:
+                    key_inp: str = input("input keys:\n")
+                    key_inp = key_inp.split(" ")
+                    temp_keylist2 = []
+                    for keys in key_inp:
+                        temp_keylist2.append(keys)
+                    key_inp = temp_keylist2
+                else:
+                    key_inp: str = input("input key:\n")
                 try:
                     f = Fernet(key_inp) #THIS COULD CAUSE AN ERROR, WATCH!!
                     with open(file, "rb") as encrypted_f:
@@ -164,7 +181,15 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 except Exception: UnboundLocalError, print("no file specified"), logger.logging.error("UnboundLocalError while loading file")
             
             elif command == "/setkey": #BE CAREFUL, IF YOU PLACE WRONG INFO. YOU'LL GET ERRORS LATER ON
-                KEY = input("set the key if you've already got one:\n")
+                if multiQ:
+                    KEY = str(input("set the keys if you've already got one:\n"))
+                    KEY = KEY.split(" ")
+                    temp_keylist = []
+                    for keys in KEY:
+                        temp_keylist.append(keys)
+                    KEY = temp_keylist
+                else:
+                    KEY = input("set the key if you've already got one:\n")
                 #check if the key has been generated or setted | true = generated; false = setted
                 genkey_checkpoint = False
             
