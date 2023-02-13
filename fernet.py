@@ -21,6 +21,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
         if clear: vars().clear() #clear all variables regardless of the parameter input
         else: pass
 
+        multiQ = False
         while True:
             if multiQ == True: #to make the user know whether they're on multifernet encryption mode or not
                 command: str = input("multi.cmd->\t")
@@ -37,12 +38,17 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
             elif command == "/genkey":
                 if multiQ:
-                    KEY = [Fernet.generate_key(), Fernet.generate_key()]
-                    key_for_file = " and ".join(KEY)
+                    keysnum = int(input("how many keys do you want?\t"))
+                    KEY = []
+                    decoded_KEY = [] #decoded vers. of KEY
+                    for _ in range(keysnum):
+                        new_key_instance = Fernet.generate_key()
+                        KEY.append(bytes(new_key_instance)) #it goes through every key inputted
+
+                    key_for_file = " and ".join(decoded_KEY)
                 else:
                     KEY = Fernet.generate_key()
-
-                decoded_key = KEY.decode()
+                    decoded_key = KEY.decode()
 
                 id_num = randint(0, 1000)
 
@@ -54,7 +60,10 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
                 with open(f"FERNETKEY{id_num}.txt", "wb") as f_key:
                     if multiQ:
-                        f_key.write(key_for_file)
+                        for each_key in KEY:
+                            f_key.write("  and   ".encode())
+                            f_key.write(each_key)
+                            
                     else:
                        f_key.write(KEY)
                 
@@ -236,11 +245,11 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             elif command == "/multi -q":
                 #quit multifernet mode
                 multiQ = False
-                pass
+                menu("left multifernet mode", True)
 
             else: print("unknown")
 
 print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
-multiQ = False # automatically set to false
+ # automatically set to false
     
 menu(None, False) #PRINTDEF=NONE FOR NO PRINT
