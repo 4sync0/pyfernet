@@ -40,12 +40,11 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 if multiQ:
                     keysnum = int(input("how many keys do you want?\t"))
                     KEY = []
-                    decoded_KEY = [] #decoded vers. of KEY
+                    decoded_key = [] #decoded vers. of KEY
                     for _ in range(keysnum):
                         new_key_instance = Fernet.generate_key()
-                        KEY.append(bytes(new_key_instance)) #it goes through every key inputted
-
-                    key_for_file = " and ".join(decoded_KEY)
+                        decoded_key.append(new_key_instance.decode()) #just decoding it and adding to decoded_key list -> decoded
+                        KEY.append(bytes(new_key_instance)) #it goes through every key inputted and adds it to KEY list -> encoded
                 else:
                     KEY = Fernet.generate_key()
                     decoded_key = KEY.decode()
@@ -142,10 +141,19 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     #append key tuple
                     with open("STORAGE/storage_listKEY.py", "a") as f:
                         #check if it has the key in bytes or if the user just setted it, so it's not on bytes so it needs no decode
-                        if genkey_checkpoint:
-                            f.write(f", '{decoded_key}'")
-                        elif not genkey_checkpoint:
-                            f.write(f", '{KEY}'")               
+                        if multiQ:
+                            if genkey_checkpoint:
+                                f.write(decoded_key)
+                                
+                            elif not genkey_checkpoint:
+                                    f.writelines(f", {list(KEY)}")
+                                    #for key in KEY:
+                                    #    f.write(f", '{key}'")
+                        else:
+                            if genkey_checkpoint:
+                                f.write(f", '{decoded_key}'")
+                            elif not genkey_checkpoint:
+                                f.write(f", '{KEY}'")  
                         
                     #append file tuple
                     with open("STORAGE/storage_listFILE.py", "a") as f:
@@ -192,7 +200,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             elif command == "/setkey": #BE CAREFUL, IF YOU PLACE WRONG INFO. YOU'LL GET ERRORS LATER ON
                 if multiQ:
                     KEY = str(input("set the keys if you've already got one:\n"))
-                    KEY = KEY.split(" ")
+                    KEY = KEY.split(" and ")
                     temp_keylist = []
                     for keys in KEY:
                         temp_keylist.append(keys)
