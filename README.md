@@ -67,10 +67,14 @@ With [pyfernet][repofernet], you can now do all without wasting time, no knowled
 * Another **pretty important** command, would be: ```/update```. This, not only **checks if your [pyfernet][repofernet] clone is outdated and updates it**, but it also does a customized and simple backup of certain files (storage.json, logs.log & true.txt)
 <br>
 
-## What's coming next?  
-- Multifernet implementation  
- <br>
-   
+#### Multifernet encryption  
+This new feature allows you to encrypt files using several keys instead of just one.  
+There's no change in commands, just **start** it using the ```/multi -s``` command & **quit** the multifernet mode with: ```/multi -q```  
+But first, there are some things you need to **take into account**:
+* If you type the ```/setkey``` command, you'll only type the **keys separated by** <sub>space</sub>**and**<sub>space</sub> else the key won'tsave correctly into the list
+* This multifernet implementation into [pyfernet][repofernet] is pretty new and recent, so **you may experience some bugs** while using it, please report any problem in [issues](https://github.com/Party-Pie/pyfernet/issues "pyfernet issues tab")
+
+<br>
 <sup>That'd be all for now, appreciate taking your time in reading this</sup>
   
 Made with love, by PartyPie
