@@ -59,9 +59,14 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
                 with open(f"FERNETKEY{id_num}.txt", "wb") as f_key:
                     if multiQ:
+                        #forloop_detect is to avoid a space at the beginning of the file where the key is stored
+                        forloop_detect = False
                         for each_key in KEY:
-                            f_key.write("  and   ".encode())
+                            if forloop_detect:
+                                f_key.write(" ".encode())
+                            else: pass
                             f_key.write(each_key)
+                            forloop_detect = True
                             
                     else:
                        f_key.write(KEY)
@@ -143,12 +148,26 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                         #check if it has the key in bytes or if the user just setted it, so it's not on bytes so it needs no decode
                         if multiQ:
                             if genkey_checkpoint:
-                                f.write(decoded_key)
+                                forloop_detect_save = False
+                                f.write(", [") #determinates the start of the list
+                                for element in decoded_key:
+                                    if forloop_detect_save:
+                                        f.write(f", '{str(element)}'")
+                                    else:
+                                        f.write(f"'{str(element)}'")
+                                        forloop_detect_save = True
+                                f.write("]") #determinates the end of the list
                                 
                             elif not genkey_checkpoint:
-                                    f.writelines(f", {list(KEY)}")
-                                    #for key in KEY:
-                                    #    f.write(f", '{key}'")
+                                forloop_detect_save = False
+                                f.write(", [") #determinates the start of the list
+                                for element in KEY:
+                                    if forloop_detect_save:
+                                        f.write(f", '{str(element)}'")
+                                    else:
+                                        f.write(f"'{str(element)}'")
+                                        forloop_detect_save = True
+                                f.write("]") #determinates the end of the list
                         else:
                             if genkey_checkpoint:
                                 f.write(f", '{decoded_key}'")
@@ -161,7 +180,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
                     logger.logging.debug("info saved to storage")
 
-                except Exception: UnboundLocalError, print("no key specified"), print("no key generated during this sesion"), logger.logging.error("UnboundLocalError while saving")
+                except Exception: UnboundLocalError, print("no key specified"), logger.logging.error("UnboundLocalError while saving")
                                  
             elif command == "/load":
                 pytojson.start(True)
@@ -199,8 +218,8 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             
             elif command == "/setkey": #BE CAREFUL, IF YOU PLACE WRONG INFO. YOU'LL GET ERRORS LATER ON
                 if multiQ:
-                    KEY = str(input("set the keys if you've already got one:\n"))
-                    KEY = KEY.split(" and ")
+                    KEY = str(input("set the keys if you've already got one:(each one separated by a space)\n"))
+                    KEY = KEY.split("/")
                     temp_keylist = []
                     for keys in KEY:
                         temp_keylist.append(keys)
