@@ -101,23 +101,27 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 exit("bai")
         
             elif command == "/decrypt":
-                if multiQ:
+                #check if key has been setted or not, now longer needs to input keys every time you decrypt a file
+                if KEY:
+                    key_inp = KEY
+                else:
                     key_inp: str = input("input keys:\n")
+                if multiQ:
                     key_inp = key_inp.split(" ")
                     temp_keylist2 = []
                     for keys in key_inp:
                         temp_keylist2.append(keys)
                     key_inp = temp_keylist2
                 else:
-                    key_inp: str = input("input key:\n")
+                    pass
                 try:
                     f = Fernet(key_inp) #THIS COULD CAUSE AN ERROR, WATCH!!
                     with open(file, "rb") as encrypted_f:
                         encrypted = encrypted_f.read()
                     
-                    decrypted = f.decrypt(encrypted)
+                    decrypted = f.decrypt(encrypt)
             
-                    with open(f"decrypted_{file}", "wb") as decrypted_f:
+                    with open(file, "wb") as decrypted_f:
                         decrypted_f.write(decrypted)
             
                     print(f"succesfully decripted {file}")
@@ -274,6 +278,32 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 multiQ = False
                 menu("left multifernet mode", True)
 
+            elif command == "/decrypt -t":
+                #same as /decrypt but with the at_time function
+                if KEY:
+                    key_inp = KEY
+                else:
+                    key_inp: str = input("input keys:\n")
+                if multiQ:
+                    menu("this feature has not been tested in multifernet yet", False)
+                else:
+                        decrypt_when = input(f"insert the time (in seconds) when the key for: {file} will be available for decryption\n")
+                        Fernet.decrypt_at_time(key_inp, int(decrypt_when))
+                
+                        print(f"\n {file}'s key will stop working for decryption in: {decrypt_when} seconds")
+                        logger.logging.debug(f"{file}'s key will be functional until {decrypt_when} sec.")
+                
+            elif command == "/encrypt -t":
+                #same as /encrypt but with the at_time function
+                if multiQ:
+                    menu("this feature has not been tested in multifernet yet", False)
+                else:
+                    encrypt_when = input(f"insert the time (in seconds) when the key for: {file} will be available for encryption\n")
+                    Fernet.encrypt_at_time(key_inp, file, int(encrypt_when))
+
+                    print(f"\n {file}'s key will stop working for encryption in: {encrypt_when} seconds")
+                    logger.logging.debug(f"{file}'s key will be functional until {encrypt_when} sec.")
+                    
             else: print("unknown")
 
 print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
