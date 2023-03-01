@@ -3,6 +3,9 @@
 
 # pyfernet
 ### python cryptography fernet    
+**IMPORTANT**:
+pyfernet doesnt have database to store keys yet, meaning that keys won't work once you end the sesion, **I'll make all this stuff during this week** so dont worry  
+<br>
 ![fernet encryption jpg](https://cdn.pixabay.com/photo/2015/12/13/15/32/cryptographic-1091257_960_720.jpg)  
 <br>
 ![maintained badge](https://img.shields.io/maintenance/yes/2023?logo=github&logoColor=gold)
@@ -65,7 +68,8 @@ With [pyfernet][repofernet], you can now do all without wasting time, no knowled
 * Another little thing you can do is **deleting the variables** during that same sesion, to do so, type: ```/delvars```  
 * In order to **exit**, you should run, ```/exit```, or hold ctrl+C, but that's only recommended if the script froze.  
 * Another **pretty important** command, would be: ```/update```. This, not only **checks if your [pyfernet][repofernet] clone is outdated and updates it**, but it also does a customized and simple backup of certain files (storage.json, logs.log & true.txt)
-<br>
+  
+*New feature* : You now can use ```/encrypt -t``` and ```/decrypt -t``` in order to make a **temporary key** for encryption and decryption  
 
 #### Multifernet encryption  
 This new feature allows you to encrypt files using several keys instead of just one.  
