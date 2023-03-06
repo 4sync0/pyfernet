@@ -3,15 +3,22 @@ print("loading...")
 import os
 from cryptography.fernet import Fernet, InvalidToken, MultiFernet
 from random import randint
-from sys import exit, platform
+from sys import exit
 import json
 import subprocess
+from pymongo import MongoClient
 
 #imported files
 from LOGS import logs_setup as logger
 from STORAGE import pytojson
 import file_moving
 
+
+#connect with the db
+client = MongoClient("mongodb+srv://vscode:vscusr_limited11@cluster4pyfernet.mutcgi3.mongodb.net/test")
+dbs = client.list_database_names()
+keys_db = client.keys
+keys_collection = keys_db["keys"]
 
 
 def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
@@ -22,6 +29,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
         else: pass
 
         multiQ = False
+
         while True:
             if multiQ == True: #to make the user know whether they're on multifernet encryption mode or not
                 command: str = input("multi.cmd->\t")
@@ -37,6 +45,10 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 else: pass
 
             elif command == "/genkey":
+                if keys_collection.find({"file": file}):
+                    menu(f"key already exists for {file}", False)
+
+                    
                 if multiQ:
                     keysnum = int(input("how many keys do you want?\t"))
                     KEY = []
@@ -75,6 +87,13 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 genkey_checkpoint = True
 
                 print(f"\n->the key that just got generated is unique, use \"/sesion\" for more information\n")
+
+                #store key in db
+                key_doc = {
+                    "file": file,
+                    "key": KEY.decode()
+                }
+                keys_collection.insert_one(key_doc)
                     
             elif command == "/encrypt":
                 try:
@@ -232,7 +251,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     KEY = input("set the key if you've already got one:\n")
                 #check if the key has been generated or setted | true = generated; false = setted
                 genkey_checkpoint = False
-            
+
             elif command == "/key":
                 try:
                     if genkey_checkpoint:
