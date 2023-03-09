@@ -1,0 +1,14 @@
+ ERROR, fernet.py , 2023-03-09 17:08:08,686, UnboundLocalError while loading key
+ ERROR, fernet.py , 2023-03-09 22:19:19,370, UnboundLocalError while loading key
+ DEBUG, fernet.py , 2023-03-09 22:27:50,805, sesion ended
+ ERROR, fernet.py , 2023-03-09 22:28:10,562, UnboundLocalError while loading key
+ DEBUG, fernet.py , 2023-03-09 23:28:04,754, sesion ended
+ DEBUG, fernet.py , 2023-03-09 23:54:41,857, sesion ended
+ DEBUG, fernet.py , 2023-03-09 23:55:24,601, sesion ended
+ DEBUG, fernet.py , 2023-03-09 23:56:19,505, sesion ended
+ DEBUG, fernet.py , 2023-03-10 00:07:07,191, sesion ended
+ DEBUG, fernet.py , 2023-03-10 00:08:13,413, sesion ended
+ DEBUG, fernet.py , 2023-03-10 00:10:03,085, sesion ended
+ ERROR, fernet.py , 2023-03-10 00:13:12,911, UnboundLocalError while loading key
+ DEBUG, fernet.py , 2023-03-10 00:20:42,225, sesion ended
+ DEBUG, fernet.py , 2023-03-10 00:26:30,667, sesion ended

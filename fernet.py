@@ -2,7 +2,7 @@ print("loading...")
 
 import os
 from cryptography.fernet import Fernet, InvalidToken, MultiFernet
-from random import randint
+from random import randrange
 from sys import exit
 import json
 import subprocess
@@ -18,7 +18,8 @@ import file_moving
 client = MongoClient("mongodb+srv://vscode:vscusr_limited11@cluster4pyfernet.mutcgi3.mongodb.net/test")
 dbs = client.list_database_names()
 keys_db = client.keys
-keys_collection = keys_db["keys"]
+
+
 
 
 def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
@@ -29,6 +30,10 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
         else: pass
 
         multiQ = False
+
+        #access the id through here so I get no UnboundLocalError
+        with open("last_id.txt", "r") as f:
+            id_num = f.read()
 
         while True:
             if multiQ == True: #to make the user know whether they're on multifernet encryption mode or not
@@ -45,9 +50,17 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 else: pass
 
             elif command == "/genkey":
-                if keys_collection.find({"file": file}):
-                    menu(f"key already exists for {file}", False)
+                keys_collection = keys_db[str(id_num)] #set collection
 
+#                if keys_collection.find_one({"file": file}) != None:
+#                    keys_collection.drop(keys_collection) #delete collection because it already exists
+#                    menu(f"key already exists for {file}", False)
+#
+#                    keys_collection = keys_db[str(id_num)] #new one because afer the if method, there's none
+#                    
+#
+#                else: continue
+#NOTE: UNDER DEVELOPMENT
                     
                 if multiQ:
                     keysnum = int(input("how many keys do you want?\t"))
@@ -61,13 +74,6 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     KEY = Fernet.generate_key()
                     decoded_key = KEY.decode()
 
-                id_num = randint(0, 1000)
-
-                #check if already taken, if taken do again
-                fileK_checking = os.path.exists(f"FERNETKEY{id_num}.txt")
-                if fileK_checking: id_num = randint(0, 1000)
-                
-                else: pass
 
                 with open(f"FERNETKEY{id_num}.txt", "wb") as f_key:
                     if multiQ:
@@ -240,6 +246,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 except Exception: UnboundLocalError, print("no file specified"), logger.logging.error("UnboundLocalError while loading file")
             
             elif command == "/setkey": #BE CAREFUL, IF YOU PLACE WRONG INFO. YOU'LL GET ERRORS LATER ON
+                keys_collection = keys_db[id_num]
                 if multiQ:
                     KEY = str(input("set the keys if you've already got one:(each one separated by a space)\n"))
                     KEY = KEY.split("/")
@@ -249,8 +256,22 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     KEY = temp_keylist
                 else:
                     KEY = input("set the key if you've already got one:\n")
+
+                #check if already taken, if taken do again
+                fileK_checking = os.path.exists(f"FERNETKEY{id_num}.txt")
+                if fileK_checking: id_num = randrange(0, 1000)
+                
+                else: pass
+                
                 #check if the key has been generated or setted | true = generated; false = setted
                 genkey_checkpoint = False
+
+                #store key in db
+                key_doc = {
+                    "file": file,
+                    "key": KEY.decode()
+                }
+                keys_collection.insert_one(key_doc)
 
             elif command == "/key":
                 try:
@@ -327,5 +348,22 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
 print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
  # automatically set to false
+
+ #unique sesion identifier
+id_num = randrange(0, 1000000000)
+with open("last_id.txt", "r") as f:
+    last_id = f.read()
+with open("last_id.txt", "w") as f:
+    current_id = f.write(str(id_num))
+
+if current_id == last_id:
+    subprocess.run(["rm last_id"])
+#if taken
+try:
+    while current_id == last_id:
+        id_num = randrange(0, 1000000000)
+finally:
+    with open("last_id.txt", "w") as f:
+        f.write(str(id_num))
     
 menu(None, False) #PRINTDEF=NONE FOR NO PRINT
