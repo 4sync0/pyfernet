@@ -93,13 +93,6 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 genkey_checkpoint = True
 
                 print(f"\n->the key that just got generated is unique, use \"/sesion\" for more information\n")
-
-                #store key in db
-                key_doc = {
-                    "file": file,
-                    "key": KEY.decode()
-                }
-                keys_collection.insert_one(key_doc)
                     
             elif command == "/encrypt":
                 try:
@@ -245,7 +238,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 
                 except Exception: UnboundLocalError, print("no file specified"), logger.logging.error("UnboundLocalError while loading file")
             
-            elif command == "/setkey": #BE CAREFUL, IF YOU PLACE WRONG INFO. YOU'LL GET ERRORS LATER ON
+            elif command == "/setkey":
                 keys_collection = keys_db[id_num]
                 if multiQ:
                     KEY = str(input("set the keys if you've already got one:(each one separated by a space)\n"))
@@ -253,25 +246,22 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     temp_keylist = []
                     for keys in KEY:
                         temp_keylist.append(keys)
-                    KEY = temp_keylist
+                    ask_key = temp_keylist
                 else:
-                    KEY = input("set the key if you've already got one:\n")
+                    ask_key = input("set the key: \n")
 
-                #check if already taken, if taken do again
-                fileK_checking = os.path.exists(f"FERNETKEY{id_num}.txt")
-                if fileK_checking: id_num = randrange(0, 1000)
-                
-                else: pass
-                
-                #check if the key has been generated or setted | true = generated; false = setted
-                genkey_checkpoint = False
+                #check if the key is in db
+                collections = keys_db.list_collection_names()
 
-                #store key in db
-                key_doc = {
-                    "file": file,
-                    "key": KEY.decode()
-                }
-                keys_collection.insert_one(key_doc)
+                for collection in collections:
+                    keys_collection_indent = keys_db[str(collection)]
+                    if keys_collection_indent.find_one({"file": file, "key": ask_key}) != None: #only files with their keys that are in the db will continue
+                        KEY = ask_key
+                        #to check if the key has been generated or setted | true = generated; false = setted
+                        genkey_checkpoint = False
+                        break
+                    elif keys_collection_indent.find_one({"file": file, "key": ask_key}) == None:
+                        menu(f"There's no key for: {file}", False)
 
             elif command == "/key":
                 try:
