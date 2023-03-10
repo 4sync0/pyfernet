@@ -51,16 +51,16 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
             elif command == "/genkey":
                 keys_collection = keys_db[str(id_num)] #set collection
+                collections = keys_db.list_collection_names()
 
-#                if keys_collection.find_one({"file": file}) != None:
-#                    keys_collection.drop(keys_collection) #delete collection because it already exists
-#                    menu(f"key already exists for {file}", False)
-#
-#                    keys_collection = keys_db[str(id_num)] #new one because afer the if method, there's none
-#                    
-#
-#                else: continue
-#NOTE: UNDER DEVELOPMENT
+
+                for collection in collections: #check every collection within the db
+                    keys_collection_indent = keys_db[str(collection)]
+                    if keys_collection_indent.find_one({"file": file}) != None: #only new files that arent in the db will continue
+                        menu(f"key already exists for {file}", False)
+                    
+                    else: continue
+
                     
                 if multiQ:
                     keysnum = int(input("how many keys do you want?\t"))
