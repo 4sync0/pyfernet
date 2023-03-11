@@ -2,15 +2,23 @@ print("loading...")
 
 import os
 from cryptography.fernet import Fernet, InvalidToken, MultiFernet
-from random import randint
-from sys import exit, platform
+from random import randrange
+from sys import exit
 import json
 import subprocess
+from pymongo import MongoClient
 
 #imported files
 from LOGS import logs_setup as logger
 from STORAGE import pytojson
 import file_moving
+
+
+#connect with the db
+client = MongoClient("mongodb+srv://vscode:vscusr_limited11@cluster4pyfernet.mutcgi3.mongodb.net/test")
+dbs = client.list_database_names()
+keys_db = client.keys
+
 
 
 
@@ -22,6 +30,11 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
         else: pass
 
         multiQ = False
+
+        #access the id through here so I get no UnboundLocalError
+        with open("last_id.txt", "r") as f:
+            id_num = f.read()
+
         while True:
             if multiQ == True: #to make the user know whether they're on multifernet encryption mode or not
                 command: str = input("multi.cmd->\t")
@@ -37,6 +50,18 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 else: pass
 
             elif command == "/genkey":
+                keys_collection = keys_db[str(id_num)] #set collection
+                collections = keys_db.list_collection_names()
+
+
+                for collection in collections: #check every collection within the db
+                    keys_collection_indent = keys_db[str(collection)]
+                    if keys_collection_indent.find_one({"file": file}) != None: #only new files that arent in the db will continue
+                        menu(f"key already exists for {file}", False)
+                    
+                    else: continue
+
+                    
                 if multiQ:
                     keysnum = int(input("how many keys do you want?\t"))
                     KEY = []
@@ -49,13 +74,6 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     KEY = Fernet.generate_key()
                     decoded_key = KEY.decode()
 
-                id_num = randint(0, 1000)
-
-                #check if already taken, if taken do again
-                fileK_checking = os.path.exists(f"FERNETKEY{id_num}.txt")
-                if fileK_checking: id_num = randint(0, 1000)
-                
-                else: pass
 
                 with open(f"FERNETKEY{id_num}.txt", "wb") as f_key:
                     if multiQ:
@@ -220,19 +238,31 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 
                 except Exception: UnboundLocalError, print("no file specified"), logger.logging.error("UnboundLocalError while loading file")
             
-            elif command == "/setkey": #BE CAREFUL, IF YOU PLACE WRONG INFO. YOU'LL GET ERRORS LATER ON
+            elif command == "/setkey":
+                keys_collection = keys_db[id_num]
                 if multiQ:
                     KEY = str(input("set the keys if you've already got one:(each one separated by a space)\n"))
                     KEY = KEY.split("/")
                     temp_keylist = []
                     for keys in KEY:
                         temp_keylist.append(keys)
-                    KEY = temp_keylist
+                    ask_key = temp_keylist
                 else:
-                    KEY = input("set the key if you've already got one:\n")
-                #check if the key has been generated or setted | true = generated; false = setted
-                genkey_checkpoint = False
-            
+                    ask_key = input("set the key: \n")
+
+                #check if the key is in db
+                collections = keys_db.list_collection_names()
+
+                for collection in collections:
+                    keys_collection_indent = keys_db[str(collection)]
+                    if keys_collection_indent.find_one({"file": file, "key": ask_key}) != None: #only files with their keys that are in the db will continue
+                        KEY = ask_key
+                        #to check if the key has been generated or setted | true = generated; false = setted
+                        genkey_checkpoint = False
+                        break
+                    elif keys_collection_indent.find_one({"file": file, "key": ask_key}) == None:
+                        menu(f"There's no key for: {file}", False)
+
             elif command == "/key":
                 try:
                     if genkey_checkpoint:
@@ -308,5 +338,22 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
 print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
  # automatically set to false
+
+ #unique sesion identifier
+id_num = randrange(0, 1000000000)
+with open("last_id.txt", "r") as f:
+    last_id = f.read()
+with open("last_id.txt", "w") as f:
+    current_id = f.write(str(id_num))
+
+if current_id == last_id:
+    subprocess.run(["rm last_id"])
+#if taken
+try:
+    while current_id == last_id:
+        id_num = randrange(0, 1000000000)
+finally:
+    with open("last_id.txt", "w") as f:
+        f.write(str(id_num))
     
 menu(None, False) #PRINTDEF=NONE FOR NO PRINT
