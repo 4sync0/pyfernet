@@ -6,7 +6,7 @@ from random import randrange
 from sys import exit
 import json
 import subprocess
-from pymongo import MongoClient
+from pymongo import MongoClient, errors
 
 #imported files
 from LOGS import logs_setup as logger
@@ -333,7 +333,16 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
                     print(f"\n {file}'s key will stop working for encryption in: {encrypt_when} seconds")
                     logger.logging.debug(f"{file}'s key will be functional until {encrypt_when} sec.")
-                    
+            
+            elif command == "/search":
+                set_db = str(input("id:\t"))
+                if set_db not in keys_db.list_collection_names(): #seach if it is on the database
+                    menu("the id is invalid or it doesn't exist", False)
+                else:
+                    searched_collection = keys_db[set_db]
+                    for doc in searched_collection.find():
+                        print(doc)
+                #NOTE: Make it so that it also gets a different, safe unique identifier for the person who saved it on the db (add a specific value to the doc that only the file owner has/knows)
             else: print("unknown")
 
 print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
