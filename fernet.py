@@ -93,6 +93,16 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 genkey_checkpoint = True
 
                 print(f"\n->the key that just got generated is unique, use \"/sesion\" for more information\n")
+
+                #to the db
+                doc_gen = {
+                    "file": file,
+                    "key" : KEY
+                }
+
+                keys_collection.insert_one(doc_gen)
+
+                #NOTE: on 2/2, fix BinData saves on the db, to just store the key 
                     
             elif command == "/encrypt":
                 try:
@@ -119,6 +129,8 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 exit("bai")
         
             elif command == "/decrypt":
+                keys_collection = keys_db[str(id_num)] #set collection
+
                 #check if key has been setted or not, now longer needs to input keys every time you decrypt a file
                 if KEY:
                     key_inp = KEY
@@ -145,6 +157,8 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     print(f"succesfully decripted {file}")
                     logger.logging.debug(f"{file} decrypted")
 
+                    #delete from the db
+                    keys_collection.drop(id_num)
                 except Exception: InvalidToken, print("invalid token"), logger.logging.error("InvalidToken(fernet) while decryption")
                 
             elif command == "/sesion":
