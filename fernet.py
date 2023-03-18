@@ -6,7 +6,8 @@ from random import randrange
 from sys import exit
 import json
 import subprocess
-from pymongo import MongoClient, errors
+from pymongo import MongoClient
+from base64 import urlsafe_b64encode
 
 #imported files
 from LOGS import logs_setup as logger
@@ -93,16 +94,15 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 genkey_checkpoint = True
 
                 print(f"\n->the key that just got generated is unique, use \"/sesion\" for more information\n")
-
+                #encode and decode to base64 to stop the key value from getting saved with  BinData (BSON)
+                base64KEY = urlsafe_b64encode(KEY).decode()
                 #to the db
                 doc_gen = {
                     "file": file,
-                    "key" : KEY
+                    "key" : base64KEY
                 }
 
                 keys_collection.insert_one(doc_gen)
-
-                #NOTE: on 2/2, fix BinData saves on the db, to just store the key 
                     
             elif command == "/encrypt":
                 try:
