@@ -7,7 +7,7 @@ import os.path
 import LOGS.logs_setup as logger
 
 if __name__ == "__main__":
-    logger.logging.debug("sesion stated")
+    logger.logging.info("sesion stated")
     #sets the working directory to wherever this file is
     chdir(os.path.dirname(__file__))
 
@@ -16,7 +16,7 @@ if __name__ == "__main__":
     try: open("true.txt") #exists, not first time
     except Exception: #doesn't exist, first time, runs alias script
         FileNotFoundError
-        logger.logging.debug("setting alias")
+        logger.logging.info("setting alias")
         subprocess.run(["/home/partypie/pyfernet/alias_setup.sh"], shell=True)
         
         with open("true.txt", "w") as f:

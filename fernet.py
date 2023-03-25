@@ -120,12 +120,12 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                        f.write(encrypt)
                     
                     print("\nsuccesfully encripted: ",file)
-                    logger.logging.debug(f"{file} encrypted")
+                    logger.logging.info(f"{file} encrypted")
 
-                except Exception: ValueError, print("invalid key"), logger.logging.error("ValueError while encryption")
+                except ValueError as e: print("invalid key"), logger.logging.error(e)
         
             elif command == "/exit":
-                logger.logging.debug("sesion ended")
+                logger.logging.info("sesion ended")
                 exit("bai")
         
             elif command == "/decrypt":
@@ -155,11 +155,11 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                         decrypted_f.write(decrypted)
             
                     print(f"succesfully decripted {file}")
-                    logger.logging.debug(f"{file} decrypted")
+                    logger.logging.info(f"{file} decrypted")
 
                     #delete from the db
                     keys_collection.drop(id_num)
-                except Exception: InvalidToken, print("invalid token"), logger.logging.error("InvalidToken(fernet) while decryption")
+                except InvalidToken as e: print("invalid token"), logger.logging.error(e)
                 
             elif command == "/sesion":
                 print("this sesion:\n")
@@ -175,7 +175,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                          usable to decrypt: {file} only
                          stored in: FERNETKEY{id_num}.txt""")
 
-                except Exception: UnboundLocalError, print("no key generated during this sesion"), logger.logging.error("UnboundLocalError while loading sesion")
+                except UnboundLocalError as e: print("no key generated during this sesion"), logger.logging.error(e)
             
             elif command == "/save": #will only store the last change made into both "file" and "key" variables
                 try:
@@ -214,9 +214,9 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     with open("STORAGE/storage_listFILE.py", "a") as f:
                         f.write(f", '{file}'")
 
-                    logger.logging.debug("info saved to storage")
+                    logger.logging.info("info saved to storage")
 
-                except Exception: UnboundLocalError, print("no key specified"), logger.logging.error("UnboundLocalError while saving")
+                except UnboundLocalError as e: print("no key specified"), logger.logging.error(e)
                                  
             elif command == "/load":
                 pytojson.start(True)
@@ -250,7 +250,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             elif command == "/file":
                 try: print(file)
                 
-                except Exception: UnboundLocalError, print("no file specified"), logger.logging.error("UnboundLocalError while loading file")
+                except UnboundLocalError as e: print("no file specified"), logger.logging.error(e)
             
             elif command == "/setkey":
                 keys_collection = keys_db[id_num]
@@ -283,7 +283,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                         print(decoded_key)
                     elif not genkey_checkpoint:
                         print(KEY)
-                except Exception: UnboundLocalError, print("no key specified"), logger.logging.error("UnboundLocalError while loading key")
+                except UnboundLocalError as e: print("no key specified"), logger.logging.error(e)
 
             elif command == "/tojson":
                 #converts the dictionary stored in the storage directory to json file
@@ -307,7 +307,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     with open("LOGS/logs.log", "x") as f:
                         f.write("")
 
-                except Exception: FileNotFoundError, print("file error"), logger.logging.error("FileNotFoundError while relogs")
+                except FileNotFoundError as e: print("file error"), logger.logging.error(e)
             
             elif command == "/update":
                 import repo.repo_update
@@ -335,7 +335,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                         Fernet.decrypt_at_time(key_inp, int(decrypt_when))
                 
                         print(f"\n {file}'s key will stop working for decryption in: {decrypt_when} seconds")
-                        logger.logging.debug(f"{file}'s key will be functional until {decrypt_when} sec.")
+                        logger.logging.info(f"{file}'s key will be functional until {decrypt_when} sec.")
                 
             elif command == "/encrypt -t":
                 #same as /encrypt but with the at_time function
@@ -346,7 +346,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     Fernet.encrypt_at_time(key_inp, file, int(encrypt_when))
 
                     print(f"\n {file}'s key will stop working for encryption in: {encrypt_when} seconds")
-                    logger.logging.debug(f"{file}'s key will be functional until {encrypt_when} sec.")
+                    logger.logging.info(f"{file}'s key will be functional until {encrypt_when} sec.")
             
             elif command == "/search":
                 set_db = str(input("id:\t"))

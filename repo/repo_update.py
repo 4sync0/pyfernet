@@ -41,7 +41,7 @@ else:
 #check if update
 if last_data != last_onfile:
     import repo.backup_handler
-    logger.logging.debug(f"updated pyfernet. {last_onfile} -> {last_data}")
+    logger.logging.info(f"updated pyfernet. {last_onfile} -> {last_data}")
 else:
     print("your pyfernet is up to date")
     pass
