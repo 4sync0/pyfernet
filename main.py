@@ -4,12 +4,14 @@ from os import chdir,  access, X_OK
 import sys
 import subprocess
 import os.path
+
+#sets the working directory to wherever this file is
+chdir(__file__[:24])
+
 import LOGS.logs_setup as logger
 
 if __name__ == "__main__":
     logger.logging.info("sesion stated")
-    #sets the working directory to wherever this file is
-    chdir(os.path.dirname(__file__))
 
     #makes alias only if first time
 
