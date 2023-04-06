@@ -2,7 +2,9 @@
 [repofernet]: https://github.com/Party-Pie/pyfernet "pyfernet github repo"
 
 # pyfernet
-### python cryptography fernet    
+### python cryptography fernet  
+##### NOTE
+As for right now, this repository will face less updates/month due to the unsuccess of the project, lack of new ideas and thought that this repository already has enough commands and stuff added to it, I don't want it to become unecessary complex. Although this could change in the future
 
 ![fernet encryption jpg](https://cdn.pixabay.com/photo/2015/12/13/15/32/cryptographic-1091257_960_720.jpg)  
 <br>
