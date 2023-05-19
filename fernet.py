@@ -16,7 +16,7 @@ import file_moving
 
 
 #connect with the db
-client = MongoClient("mongodb+srv://vscode:vscusr_limited11@cluster4pyfernet.mutcgi3.mongodb.net/test")
+client = MongoClient("mongodb+srv://vscode:KCHZ2YJPx5qsjLJs@cluster4pyfernet.mutcgi3.mongodb.net/")
 dbs = client.list_database_names()
 keys_db = client.keys
 

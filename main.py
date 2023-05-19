@@ -3,10 +3,17 @@
 from os import chdir,  access, X_OK
 import sys
 import subprocess
-import os.path
+from os import path, walk
 
 #sets the working directory to wherever this file is
-chdir(__file__[:24])
+def search_directory(target_directory):
+    for root, dirs, files in walk('.'):
+        if target_directory in dirs:
+            return path.join(root, target_directory)
+    
+    return None
+
+search_directory("pyfernet")
 
 import LOGS.logs_setup as logger
 
