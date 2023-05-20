@@ -26,12 +26,12 @@ if last_onfile == last_data:
 
 else:
     #get last update
-    subprocess.run("git pull", shell=True)
+    subprocess.run(["git", "pull"])
     #then delete last save
     if os.name == "posix": #linux & macos
-        subprocess.run("sudo rm repo/lastcheck.txt", shell=True)
-    elif os.name == "nt":
-        subprocess.run("del repo/lastcheck.txt", shell=True)
+        subprocess.run(["sudo", "rm", "repo/lastcheck.txt"])
+    elif os.name == "nt": #windows
+        subprocess.run(["del", "repo/lastcheck.txt"])
     
     #save in file
     with open("repo/lastcheck.txt", "w") as f:

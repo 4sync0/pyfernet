@@ -45,7 +45,7 @@ if confirm == "y":
         if truetxt: shutil.move("true.txt", "repo/content")
         else: pass
 
-        if logslog: shutil.move("LOGS/logs.log")
+        if logslog: shutil.move("LOGS/logs.log", "repo/content")
         else: pass
 
         #& put it on the home directory
@@ -54,7 +54,7 @@ if confirm == "y":
 
     finally:
         #get lastest
-        subprocess.run("git pull")
+        subprocess.run(["git", "pull", "https://github.com/Party-Pie/pyfernet"])
 
         #delete the new ones (only the ones that are already on the repo)
         #then put back

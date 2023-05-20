@@ -125,7 +125,6 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 except ValueError as e: print("invalid key"), logger.logging.error(e)
         
             elif command == "/exit":
-                logger.logging.info("sesion ended")
                 exit("bai")
         
             elif command == "/decrypt":
@@ -302,7 +301,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             elif command == "/relogs":
                 try:
                     #destroy logs witht he ultimate power of god (aka bash)
-                    subprocess.run("rm LOGS/logs.log", shell=True)
+                    subprocess.run(["rm", "LOGS/logs.log"])
                     #then create it back but empty
                     with open("LOGS/logs.log", "x") as f:
                         f.write("")
@@ -370,7 +369,7 @@ with open("last_id.txt", "w") as f:
     current_id = f.write(str(id_num))
 
 if current_id == last_id:
-    subprocess.run(["rm last_id"])
+    subprocess.run(["rm", "last_id"])
 #if taken
 try:
     while current_id == last_id:
