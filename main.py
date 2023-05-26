@@ -6,17 +6,17 @@ import requests
 
 last_dir = getcwd()
 
+#THIS IS ALL TO FIX FILE IMPORTING
 #sets the working directory to wherever this file is
 def search_directory(target_directory):
-    for root, dirs, files in walk('.'):
+    current_dir = path.dirname(path.realpath(__file__))
+    for root, dirs, files in walk(current_dir):
         if target_directory in dirs:
-            return path.join(root, target_directory)
-    
-    return None
+            return path.abspath(path.join(root, target_directory))
 
-now_dir = search_directory("pyfernet")
+    return path.abspath(path.join(current_dir))
 
-chdir(now_dir)
+chdir(search_directory("pyfernet"))
 
 import LOGS.logs_setup as logger
 
