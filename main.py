@@ -21,8 +21,22 @@ chdir(search_directory("pyfernet"))
 import LOGS.logs_setup as logger
 
 if __name__ == "__main__":
-    #makes alias only if first time
 
+    #give every shell script executable perms only if they dont have it
+
+    #alias_setup.sh
+    if access("alias_setup.sh", X_OK):
+        pass
+    else:
+        subprocess.run(["sudo -v chmod +x alias_setup.sh"])
+    
+    #rmdict_cmd.sh
+    if access("STORAGE/rmdict_cmd.sh", X_OK):
+        pass
+    else:
+        subprocess.run(["sudo -v chmod +x rmdict_cmd.sh"])
+
+    #makes alias only if first time
     try: open("true.txt") #exists, not first time
     except Exception: #doesn't exist, first time; runs alias script & store commit
         logger.logging.info("setting alias")
@@ -43,20 +57,6 @@ if __name__ == "__main__":
 
         with open("true.txt", "w") as f:
             f.write("This file exists to check if the script runs for the first time or not, to run alias_setup.sh or only once")
-
-    #give every shell script executable perms only if they dont have it
-
-    #alias_setup.sh
-    if access("alias_setup.sh", X_OK):
-        pass
-    else:
-        subprocess.run(["sudo -v chmod +x alias_setup.sh"])
-    
-    #rmdict_cmd.sh
-    if access("STORAGE/rmdict_cmd.sh", X_OK):
-        pass
-    else:
-        subprocess.run(["sudo -v chmod +x rmdict_cmd.sh"])
 
 
     #finally gets to fernet.py
