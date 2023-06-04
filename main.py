@@ -25,7 +25,6 @@ if __name__ == "__main__":
 
     try: open("true.txt") #exists, not first time
     except Exception: #doesn't exist, first time; runs alias script & store commit
-        FileNotFoundError
         logger.logging.info("setting alias")
         subprocess.run(["./alias_setup.sh"])
 
