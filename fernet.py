@@ -14,6 +14,7 @@ from LOGS import logs_setup as logger
 from STORAGE import pytojson
 import file_moving
 
+system_name = os.name
 
 #connect with the db
 client = MongoClient("mongodb+srv://vscode:KCHZ2YJPx5qsjLJs@cluster4pyfernet.mutcgi3.mongodb.net/")
@@ -222,7 +223,11 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
             elif command == "/destroydict":
                 #running the bash script to clear x,y files
-                subprocess.run(["STORAGE/rmdict_cmd.sh"])
+                if system_name == "nt":
+                    subprocess.run(["truncate -s 0 STORAGE/storage_listFILE.py && truncate -s 0 STORAGE/storage_listKEY.py"])
+                elif system_name == "posix":
+                    subprocess.run(["sudo  truncate -s 0 STORAGE/storage_listFILE.py && truncate -s 0 STORAGE/storage_listKEY.py"])
+                
                 #rewrite to place "N" on the lists to avoid errors while appending values & place the variable again
                 with open("STORAGE/storage_listFILE.py", "w") as f:
                     f.write("filetuple = 'N'")

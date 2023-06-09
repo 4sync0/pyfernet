@@ -1,7 +1,7 @@
 #this file is to add necessary code that needs to be runned before everything else
 import sys
 import subprocess
-from os import path, walk, chdir, getcwd, chdir, access, X_OK
+from os import path, walk, chdir, getcwd, chdir, access, X_OK, name
 import requests
 
 last_dir = getcwd()
@@ -22,25 +22,22 @@ import LOGS.logs_setup as logger
 
 if __name__ == "__main__":
 
-    #give every shell script executable perms only if they dont have it
-
-    #alias_setup.sh
-    if access("alias_setup.sh", X_OK):
-        pass
-    else:
-        subprocess.run(["sudo -v chmod +x alias_setup.sh"])
-    
-    #rmdict_cmd.sh
-    if access("STORAGE/rmdict_cmd.sh", X_OK):
-        pass
-    else:
-        subprocess.run(["sudo -v chmod +x rmdict_cmd.sh"])
-
     #makes alias only if first time
     try: open("true.txt") #exists, not first time
     except Exception: #doesn't exist, first time; runs alias script & store commit
+        #give every shell script executable perms only if they dont have it
+        if name == "nt":
+            subprocess.run(["chmod +x", "./alias_setup_win.sh"])
+        else:
+            subprocess.run(["sudo", "chmod", "+x", "./alias_setup_win.sh"])
+        #add alias_setup depending on OS
+        if name == "posix":
+            subprocess.run(["./alias_setup_unix.sh"])
+        elif name == "nt":
+            subprocess.run(["./alias_setup_win.sh"])
+
         logger.logging.info("setting alias")
-        subprocess.run(["./alias_setup.sh"])
+
 
         #get api
         comms = requests.get("https://api.github.com/repos/Party-Pie/pyfernet/commits") 
