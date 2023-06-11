@@ -27,9 +27,9 @@ if __name__ == "__main__":
     except Exception: #doesn't exist, first time; runs alias script & store commit
         #give every shell script executable perms only if they dont have it
         if name == "nt":
-            subprocess.run(["chmod +x", "./alias_setup_win.sh"])
+            pass
         else:
-            subprocess.run(["sudo", "chmod", "+x", "./alias_setup_win.sh"])
+            subprocess.run(["sudo", "chmod", "+x", "./alias_setup_win.sh"], shell=True)
         #add alias_setup depending on OS
         if name == "posix":
             subprocess.run(["./alias_setup_unix.sh"], shell=True)
