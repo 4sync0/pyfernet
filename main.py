@@ -24,10 +24,9 @@ if __name__ == "__main__":
 
     #makes alias only if first time
     try: open("true.txt") #exists, not first time
-    except Exception: #doesn't exist, first time; runs alias script & store commit
-        #give every shell script executable perms only if they dont have it
+    except Exception: #doesn't exist, first time
         if name == "nt":
-            subprocess.run(["chmod +x", "./alias_setup_win.sh"])
+            pass #windows does not need exec. perms on bash scripts
         else:
             subprocess.run(["sudo", "chmod", "+x", "./alias_setup_win.sh"])
         #add alias_setup depending on OS
