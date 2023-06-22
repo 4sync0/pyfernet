@@ -4,7 +4,9 @@
 # pyfernet
 ### python cryptography fernet  
 ##### NOTE
-As for right now, this repository will face less updates/month due to the unsuccess of the project, lack of new ideas and thought that this repository already has enough commands and stuff added to it, I don't want it to become unecessary complex. Although this could change in the future
+The database **is not** secure for encrypting important files, as the token is directly in the code. I came to the conclussion that it is impossible to fully secure the token in an open source project that's meant to be runned on anyone's pc. It is recommended to **set up your own mongodb database and paste its token on the client variable <sub>(line 20 -fernet.py)</sub>**
+  
+Due to this, in a nearby future I'll make a more friendly option in the form of commands to customize the database for the storage (sql/no-sql, DBMS...)
 
 ![fernet encryption jpg](https://cdn.pixabay.com/photo/2015/12/13/15/32/cryptographic-1091257_960_720.jpg)  
 <br>
