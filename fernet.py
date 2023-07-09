@@ -1,37 +1,42 @@
-print("loading...")
+try:
+    import os
+    from cryptography.fernet import Fernet, InvalidToken, MultiFernet
+    from random import randrange
+    from sys import exit
+    import json
+    import subprocess
+    import pymongo
+    from base64 import urlsafe_b64encode
+    import mysql.connector
 
-import os
-from cryptography.fernet import Fernet, InvalidToken, MultiFernet
-from random import randrange
-from sys import exit
-import json
-import subprocess
-from pymongo import MongoClient
-from base64 import urlsafe_b64encode
-
-#imported files
-from LOGS import logs_setup as logger
-from STORAGE import pytojson
-import file_moving
-
-system_name = os.name
-
-#connect with the db
-client = MongoClient("mongodb+srv://vscode:KCHZ2YJPx5qsjLJs@cluster4pyfernet.mutcgi3.mongodb.net/")
-dbs = client.list_database_names()
-keys_db = client.keys
+    #imported files
+    from LOGS import logs_setup as logger
+    from STORAGE import pytojson
+    import file_moving
+finally: print("loaded modules & files")
 
 
 
 
-def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
+def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
+        
+        system_name = os.name
+        multiQ = False
+
         if printdef: print(printdef)
         else: pass
 
         if clear: vars().clear() #clear all variables regardless of the parameter input
         else: pass
 
-        multiQ = False
+        if redb:
+            try:
+                #default connection with database
+                client = pymongo.MongoClient("mongodb+srv://vscode:KCHZ2YJPx5qsjLJs@cluster4pyfernet.mutcgi3.mongodb.net/")
+                keys_db = client["keys"]
+            finally: print("connected to default database")
+        else: pass
+
 
         #access the id through here so I get no UnboundLocalError
         with open("last_id.txt", "r") as f:
@@ -47,7 +52,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 file_checking = os.path.exists(file)
                 if not file_checking:
                     print("file doesn't exist or you made a typo")
-                    menu(None, False)
+                    menu(None, False, False)
                     break
                 else: pass
 
@@ -59,7 +64,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 for collection in collections: #check every collection within the db
                     keys_collection_indent = keys_db[str(collection)]
                     if keys_collection_indent.find_one({"file": file}) != None: #only new files that arent in the db will continue
-                        menu(f"key already exists for {file}", False)
+                        menu(f"key already exists for {file}", False, False)
                     
                     else: continue
 
@@ -149,7 +154,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     with open(file, "rb") as encrypted_f:
                         encrypted = encrypted_f.read()
                     
-                    decrypted = f.decrypt(encrypt)
+                    decrypted = f.decrypt(encrypted)
             
                     with open(file, "wb") as decrypted_f:
                         decrypted_f.write(decrypted)
@@ -158,8 +163,8 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                     logger.logging.info(f"{file} decrypted")
 
                     #delete from the db
-                    keys_collection.drop(id_num)
-                except InvalidToken as e: print("invalid token"), logger.logging.error(e)
+                    keys_collection.delete_one({"name": id_num})
+                except InvalidToken as e: print("invalid token"), logger.logging.error(str(e))
                 
             elif command == "/sesion":
                 print("this sesion:\n")
@@ -238,7 +243,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 print("successful")
 
             elif command == "/delvars":
-                menu("deleting variable storage..",  True)
+                menu("deleting variable storage..",  True, True)
                 #fix some errors
 
             elif command == "/changedir":
@@ -273,13 +278,13 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
                 for collection in collections:
                     keys_collection_indent = keys_db[str(collection)]
-                    if keys_collection_indent.find_one({"file": file, "key": ask_key}) != None: #only files with their keys that are in the db will continue
+                    if keys_collection_indent.find_one({"file": file, "key": ask_key}) == None:
                         KEY = ask_key
-                        #to check if the key has been generated or setted | true = generated; false = setted
+
                         genkey_checkpoint = False
-                        break
-                    elif keys_collection_indent.find_one({"file": file, "key": ask_key}) == None:
-                        menu(f"There's no key for: {file}", False)
+                    elif keys_collection_indent.find_one({"file": file, "key": ask_key}) != None:
+                        print(f"No key or incorrect on {file}")
+                        continue
 
             elif command == "/key":
                 try:
@@ -298,10 +303,10 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
 
                 pytojson.start(False) #to update the new conent into the storage variable
 
-                with open("storage.json", "x") as f:
+                with open("storage.json", "w") as f:
                     json.dump(pytojson.storage, f, indent=2)
 
-            elif command == "/jsonformat": menu("under construction", False)#change the json formatting
+            elif command == "/jsonformat": menu("under construction", False, False)#change the json formatting
 
             elif command == "/relogs":
                 try:
@@ -324,7 +329,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             elif command == "/multi -q":
                 #quit multifernet mode
                 multiQ = False
-                menu("left multifernet mode", True)
+                menu("left multifernet mode", True, False)
 
             elif command == "/decrypt -t":
                 #same as /decrypt but with the at_time function
@@ -333,7 +338,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
                 else:
                     key_inp: str = input("input keys:\n")
                 if multiQ:
-                    menu("this feature has not been tested in multifernet yet", False)
+                    menu("this feature has not been tested in multifernet yet", False, False)
                 else:
                         decrypt_when = input(f"insert the time (in seconds) when the key for: {file} will be available for decryption\n")
                         Fernet.decrypt_at_time(key_inp, int(decrypt_when))
@@ -344,7 +349,7 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             elif command == "/encrypt -t":
                 #same as /encrypt but with the at_time function
                 if multiQ:
-                    menu("this feature has not been tested in multifernet yet", False)
+                    menu("this feature has not been tested in multifernet yet", False, False)
                 else:
                     encrypt_when = input(f"insert the time (in seconds) when the key for: {file} will be available for encryption\n")
                     Fernet.encrypt_at_time(key_inp, file, int(encrypt_when))
@@ -355,15 +360,87 @@ def menu(printdef: str, clear: bool): #PRINTDEF=NONE FOR NO PRINT
             elif command == "/search":
                 set_db = str(input("id:\t"))
                 if set_db not in keys_db.list_collection_names(): #seach if it is on the database
-                    menu("the id is invalid or it doesn't exist", False)
+                    menu("the id is invalid or it doesn't exist", False, False)
                 else:
                     searched_collection = keys_db[set_db]
                     for doc in searched_collection.find():
                         print(doc)
                 #NOTE: Make it so that it also gets a different, safe unique identifier for the person who saved it on the db (add a specific value to the doc that only the file owner has/knows)
+
+            elif command == "connect mongodb":
+                try: open("dbsetting.json")
+
+                except Exception:
+                    connectionI_mongodb = input("cluster token:\t")
+
+                    try:
+                        client = pymongo.MongoClient(connectionI_mongodb)
+                        keys_db = client["keys"]
+                    except pymongo.errors.ConfigurationError as e: print("token is incorrect")
+                    print("connection established")
+
+                    connection_info = {
+                    "type": "mongodb",
+                    "client": client,
+                    "keys_db": keys_db
+                    }
+
+                    with open("dbsettings.json", "w") as f:
+                        f.write(json.dumps(connection_info))
+
+                else:
+                    dbsettings = open("dbsettings.json")
+                    dbsettings = json.load(dbsettings)
+
+                    if dbsettings["type"] == "mongodb":
+                        print("connection established already")
+                        continue
+                    else: menu("database type not supported, delete dbsetting.json and make sure the type is mysql or mongodb", False, True)
+            
+            elif command == "connect mysql":
+                try: open("dbsettings.json")
+                
+                except Exception:
+                    connectionI_mysql = input("|user password host and database| in that same order sepparated by a space:\t")
+
+                    connection_keys = ["user", "password", "host", "database"]
+                    connection_values = dict(zip(connection_keys, connectionI_mysql.split(" ")))
+
+                    try:
+                        connection = mysql.connector.connect(
+                            user=connection_values["user"],
+                            password=connection_values["password"],
+                            host=connection_values["host"],
+                            database=connection_values["database"]
+                        )
+
+                    except mysql.connector.errors.ProgrammingError as e: print("incorrect values, try again")
+                    except mysql.connector.errors.InterfaceError as e: print("host is unreachable")
+                    print("connection established")
+
+                    connection_info = {
+                        "type": "mysql",
+                        "user": connection_values["user"],
+                        "password": connection_values["password"],
+                        "host": connection_values["host"],
+                        "database": connection_values["database"]
+                    }
+
+                    with open("dbsettings.json", "w") as f:
+                        f.write(json.dumps(connection_info))
+
+                else:
+                    dbsettings = open("dbsettings.json")
+                    dbsettings = json.load(dbsettings)
+
+                    if dbsettings["type"] == "mysql":
+                        print("connection established already")
+                        continue
+                    else: menu("database type not supported, delete dbsetting.json and make sure the type is mysql or mongodb", False, True)
+
             else: print("unknown")
 
-print("||fernet | p4tp5||\ntry \"/new\" command first to select a file")
+print("||fernet||\ntry \"/new\" command first to select a file")
  # automatically set to false
 
  #unique sesion identifier
@@ -382,5 +459,5 @@ try:
 finally:
     with open("last_id.txt", "w") as f:
         f.write(str(id_num))
-    
-menu(None, False) #PRINTDEF=NONE FOR NO PRINT
+
+menu(None, False, True)
