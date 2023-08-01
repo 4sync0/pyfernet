@@ -4,9 +4,11 @@
 # pyfernet
 ### python cryptography fernet  
 ##### NOTE
-The database **is not** secure for encrypting important files, as the token is directly in the code. I came to the conclussion that it is impossible to fully secure the token in an open source project that's meant to be runned on anyone's pc. It is recommended to **set up your own mongodb database and paste its token on the client variable <sub>(line 20 -fernet.py)</sub>**
+The default database **is still** not secure, it will be kept that way for testing and non-important functions as it provides an easier way of doing things.  
+Regarless, as promissed, I'm working in a **easy way to be able to input your own custom database**, for now you can only connect to a mongodb database, and the program will forget on exit
+but I have plans to make it possible to also connect to a mysql db and to make the program re-connect to the custom database every time its being used.  
   
-Due to this, in a nearby future I'll make a more friendly option in the form of commands to customize the database for the storage (sql/no-sql, DBMS...)
+But for now that's all we have, it should work fine on windows and unix (see [b-128](https://ci.appveyor.com/project/Party-Pie/pyfernet/builds/47689118 "b-128 build"))
 
 ![fernet encryption jpg](https://cdn.pixabay.com/photo/2015/12/13/15/32/cryptographic-1091257_960_720.jpg)  
 <br>
@@ -25,7 +27,7 @@ for more information regarding the fernet package, check [their github repo](htt
 Everyone can encrypt their files using [fernet][docfernet], but you could save all those 20 minutes that would take you to set up the package,
 plus the headache you'd get for any error, specially if you don't know what you're doing.  
 With [pyfernet][repofernet], you can now do all without wasting time, no knowledge with [python](https://en.wikipedia.org/wiki/Python_(programming_language "python wikipedia")
- or [cryptography](https://en.wikipedia.org/wiki/Cryptography, "cryptography wikipedia") is required  
+ or [cryptography](https://en.wikipedia.org/wiki/Cryptography "cryptography wikipedia") is required  
  With pyfernet, you can encyrpt files, decrypt files, save it in a json file, manage the keys... & weekly updates!  
  <br>
  - [x] Compatibility with Mac, linux & windows
@@ -38,7 +40,7 @@ With [pyfernet][repofernet], you can now do all without wasting time, no knowled
  This section of the readme file is totally dedicated to the installation of [pyfernet][repofernet], if you follow all the stepts, you should get no errors
  during the process.  
  <br>
- 1. Make sure you have [python](https://en.wikipedia.org/wiki/Python_(programming_language "python wikipedia") and [pip](https://en.wikipedia.org/wiki/Pip_(package_manager) "pip wikipedia") downloaded, if not, download it [**here**](https://www.python.org/ "python web") <sup>(pip should already come with python)</sup>  
+ 1. Make sure you have [python](https://en.wikipedia.org/wiki/Python_(programming_language) "python wikipedia") and [pip](https://en.wikipedia.org/wiki/Pip_(package_manager) "pip wikipedia") downloaded, if not, download it [**here**](https://www.python.org/ "python web") <sup>(pip should already come with python)</sup>  
  you can check it by running ```python --version``` and ```pip --version```  
  2. [git](https://git-scm.com/ "git website") is required for this step, so make sure you've it installed, once you have [git](https://git-scm.com/ "git website") and [python](https://www.python.org/ "python website") installed, clone this repository by running the following command:  
  ```git clone https://github.com/Party-Pie/pyfernet.git```  
