@@ -34,7 +34,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                 #default connection with database
                 client = pymongo.MongoClient("mongodb+srv://vscode:KCHZ2YJPx5qsjLJs@cluster4pyfernet.mutcgi3.mongodb.net/")
                 keys_db = client["keys"]
-            finally: print("connected to default database")
+            finally: print("connected to default database, custom db is recommended")
         else: pass
 
 
@@ -381,8 +381,8 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
 
                     connection_info = {
                     "type": "mongodb",
-                    "client": client,
-                    "keys_db": keys_db
+                    "client": connectionI_mongodb,
+                    "keys_db": "keys"
                     }
 
                     with open("dbsettings.json", "w") as f:
@@ -393,6 +393,8 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                     dbsettings = json.load(dbsettings)
 
                     if dbsettings["type"] == "mongodb":
+                        client = pymongo.MongoClient(dbsettings["client"])
+                        keys_db = client["keys"]
                         print("connection established already")
                         continue
                     else: menu("database type not supported, delete dbsetting.json and make sure the type is mysql or mongodb", False, True)
