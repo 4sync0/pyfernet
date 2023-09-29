@@ -13,6 +13,8 @@ try:
     from LOGS import logs_setup as logger
     from STORAGE import pytojson
     import file_moving
+
+except Exception as e: print("error on loading modules/files/packages"), logger.logging.error(e), exit(1)
 finally: print("loaded modules & files")
 
 
@@ -367,7 +369,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                         print(doc)
                 #NOTE: Make it so that it also gets a different, safe unique identifier for the person who saved it on the db (add a specific value to the doc that only the file owner has/knows)
 
-            elif command == "connect mongodb":
+            elif command == "/connect mongodb":
                 try: open("dbsetting.json")
 
                 except Exception:
@@ -399,47 +401,55 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                         continue
                     else: menu("database type not supported, delete dbsetting.json and make sure the type is mysql or mongodb", False, True)
             
-            elif command == "connect mysql":
+            elif command == "/connect mysql":
                 try: open("dbsettings.json")
                 
+                #new connection
                 except Exception:
                     connectionI_mysql = input("|user password host and database| in that same order sepparated by a space:\t")
 
                     connection_keys = ["user", "password", "host", "database"]
-                    connection_values = dict(zip(connection_keys, connectionI_mysql.split(" ")))
-
                     try:
+                        connection_values = dict(zip(connection_keys, connectionI_mysql.split(" ")))
+
+
                         connection = mysql.connector.connect(
                             user=connection_values["user"],
                             password=connection_values["password"],
                             host=connection_values["host"],
                             database=connection_values["database"]
                         )
+                        connection_info = {
+                            "type": "mysql",
+                            "user": connection_values["user"],
+                            "password": connection_values["password"],
+                            "host": connection_values["host"],
+                            "database": connection_values["database"]
+                        }
 
-                    except mysql.connector.errors.ProgrammingError as e: print("incorrect values, try again")
-                    except mysql.connector.errors.InterfaceError as e: print("host is unreachable")
-                    print("connection established")
+                        with open("dbsettings.json", "w") as f:
+                            f.write(json.dumps(connection_info))
 
-                    connection_info = {
-                        "type": "mysql",
-                        "user": connection_values["user"],
-                        "password": connection_values["password"],
-                        "host": connection_values["host"],
-                        "database": connection_values["database"]
-                    }
+                        print("connection established")
+                        
+                    except Exception as e: print("incorrect value(s) or order not followed, try again"), logger.logging.error(f"mysql connection err- {e}")
 
-                    with open("dbsettings.json", "w") as f:
-                        f.write(json.dumps(connection_info))
 
+
+
+                #previous save
                 else:
-                    dbsettings = open("dbsettings.json")
-                    dbsettings = json.load(dbsettings)
+                    try:
+                        dbsettings = open("dbsettings.json")
+                        connection_info = json.load(dbsettings)
 
-                    if dbsettings["type"] == "mysql":
-                        print("connection established already")
-                        continue
-                    else: menu("database type not supported, delete dbsetting.json and make sure the type is mysql or mongodb", False, True)
+                        if connection_info["type"] == "mysql":
+                            print("connection established already")
+                            continue
+                        else: menu("database type not supported, delete dbsetting.json and make sure the type is mysql or mongodb", False, True)
 
+                    except json.decoder.JSONDecodeError as e: print("no 'type' value on the json file"), logger.logging.error(e)
+            
             else: print("unknown")
 
 print("||fernet||\ntry \"/new\" command first to select a file")
@@ -463,3 +473,6 @@ finally:
         f.write(str(id_num))
 
 menu(None, False, True)
+
+
+# TEMP NOTE: CONNECTION WITH MYSQL MADE, DO SAVES AND ITS USE CASES ON COMMANDS
