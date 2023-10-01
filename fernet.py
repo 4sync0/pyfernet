@@ -131,6 +131,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                     logger.logging.info(f"{file} encrypted")
 
                 except ValueError as e: print("invalid key"), logger.logging.error(e)
+                except UnboundLocalError as e: print("no key generated or specified"), logger.logging.error(e)
         
             elif command == "/exit":
                 exit("bai")
@@ -280,13 +281,14 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
 
                 for collection in collections:
                     keys_collection_indent = keys_db[str(collection)]
-                    if keys_collection_indent.find_one({"file": file, "key": ask_key}) == None:
+                    if keys_collection_indent.find_one({"file".replace('"', ""): file, "key".replace('"', ""): ask_key}) != None:
                         KEY = ask_key
 
                         genkey_checkpoint = False
-                    elif keys_collection_indent.find_one({"file": file, "key": ask_key}) != None:
+                        break
+                    else:
                         print(f"No key or incorrect on {file}")
-                        continue
+                        break
 
             elif command == "/key":
                 try:
@@ -370,7 +372,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                 #NOTE: Make it so that it also gets a different, safe unique identifier for the person who saved it on the db (add a specific value to the doc that only the file owner has/knows)
 
             elif command == "/connect mongodb":
-                try: open("dbsetting.json")
+                try: open("dbsettings.json")
 
                 except Exception:
                     connectionI_mongodb = input("cluster token:\t")
@@ -397,7 +399,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                     if dbsettings["type"] == "mongodb":
                         client = pymongo.MongoClient(dbsettings["client"])
                         keys_db = client["keys"]
-                        print("connection established already")
+                        print("connection established")
                         continue
                     else: menu("database type not supported, delete dbsetting.json and make sure the type is mysql or mongodb", False, True)
             
@@ -474,5 +476,3 @@ finally:
 
 menu(None, False, True)
 
-
-# TEMP NOTE: CONNECTION WITH MYSQL MADE, DO SAVES AND ITS USE CASES ON COMMANDS
