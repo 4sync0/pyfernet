@@ -28,7 +28,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
         if printdef: print(printdef)
         else: pass
 
-        if clear: vars().clear() #clear all variables regardless of the parameter input
+        if clear: vars().clear() #clear all variables
         else: pass
 
         if redb:
@@ -59,6 +59,9 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                 else: pass
 
             elif command == "/genkey":
+                try: file
+                except UnboundLocalError as e: print("no file on this session, use '/new'"), logger.logging.error(e) 
+
                 keys_collection = keys_db[str(id_num)] #set collection
                 collections = keys_db.list_collection_names()
 
@@ -86,31 +89,49 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
 
                 with open(f"FERNETKEY{id_num}.txt", "wb") as f_key:
                     if multiQ:
-                        #forloop_detect is to avoid a space at the beginning of the file where the key is stored
-                        forloop_detect = False
+                        first_space_checkpoint = False
                         for each_key in KEY:
-                            if forloop_detect:
+                            if first_space_checkpoint:
                                 f_key.write(" ".encode())
                             else: pass
                             f_key.write(each_key)
-                            forloop_detect = True
+                            first_space_checkpoint = True
                             
                     else:
                        f_key.write(KEY)
                 
-                #check if the key has been generated or setted | true = generated; false = setted
+
                 genkey_checkpoint = True
 
                 print(f"\n->the key that just got generated is unique, use \"/sesion\" for more information\n")
                 #encode and decode to base64 to stop the key value from getting saved with  BinData (BSON)
-                base64KEY = urlsafe_b64encode(KEY).decode()
-                #to the db
-                doc_gen = {
-                    "file": file,
-                    "key" : base64KEY
-                }
+
+                try:
+                    urlsafe_b64encode(KEY).decode()
+                except Exception: #multi keys
+                    TypeError
+
+                    base64KEY = []
+                    for i in KEY:
+                        base64KEY.append(urlsafe_b64encode(bytes(i)).decode())
+
+                    base64KEY_str = " ".join(base64KEY)
+                    
+                    doc_gen = {
+                        "file": file,
+                        "key" : base64KEY_str
+                    }
+                else: #single key
+                    base64KEY = urlsafe_b64encode(KEY).decode()
+
+                    doc_gen = {
+                        "file": file,
+                        "key" : base64KEY
+                    } 
 
                 keys_collection.insert_one(doc_gen)
+
+                print("key saved in the database, ready to use")
                     
             elif command == "/encrypt":
                 try:
@@ -331,9 +352,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                 #using multifernet
             
             elif command == "/multi -q":
-                #quit multifernet mode
                 multiQ = False
-                menu("left multifernet mode", True, False)
 
             elif command == "/decrypt -t":
                 #same as /decrypt but with the at_time function
@@ -381,7 +400,9 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                         client = pymongo.MongoClient(connectionI_mongodb)
                         keys_db = client["keys"]
                     except pymongo.errors.ConfigurationError as e: print("token is incorrect")
-                    print("connection established")
+                    else:
+                        print("connection established")
+                        mysql_checkpoint = False
 
                     connection_info = {
                     "type": "mongodb",
@@ -400,6 +421,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                         client = pymongo.MongoClient(dbsettings["client"])
                         keys_db = client["keys"]
                         print("connection established")
+                        mysql_checkpoint = False
                         continue
                     else: menu("database type not supported, delete dbsetting.json and make sure the type is mysql or mongodb", False, True)
             
@@ -415,12 +437,13 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                         connection_values = dict(zip(connection_keys, connectionI_mysql.split(" ")))
 
 
-                        connection = mysql.connector.connect(
+                        mysql_connection = mysql.connector.connect(
                             user=connection_values["user"],
                             password=connection_values["password"],
                             host=connection_values["host"],
                             database=connection_values["database"]
                         )
+
                         connection_info = {
                             "type": "mysql",
                             "user": connection_values["user"],
@@ -429,8 +452,12 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                             "database": connection_values["database"]
                         }
 
+                        mysql_cursor = mysql_connection.cursor()
+
                         with open("dbsettings.json", "w") as f:
                             f.write(json.dumps(connection_info))
+
+                        mysql_checkpoint = True
 
                         print("connection established")
                         
@@ -446,7 +473,19 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                         connection_info = json.load(dbsettings)
 
                         if connection_info["type"] == "mysql":
-                            print("connection established already")
+
+                            mysql_connection = mysql.connector.connect(
+                            user=connection_info["user"],
+                            password=connection_info["password"],
+                            host=connection_info["host"],
+                            database=connection_info["database"]
+                            )
+
+                            mysql_cursor = mysql_connection.cursor()
+
+                            mysql_checkpoint = True
+
+                            print("connection established")
                             continue
                         else: menu("database type not supported, delete dbsetting.json and make sure the type is mysql or mongodb", False, True)
 
@@ -473,6 +512,8 @@ try:
 finally:
     with open("last_id.txt", "w") as f:
         f.write(str(id_num))
+
+mysql_checkpoint = False
 
 menu(None, False, True)
 
