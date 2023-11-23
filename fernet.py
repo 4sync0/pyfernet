@@ -9,7 +9,7 @@ try:
     from base64 import urlsafe_b64encode
     import mysql.connector
 
-    #imported files
+    # imported files
     from LOGS import logs_setup as logger
     from STORAGE import pytojson
     import file_moving
@@ -20,7 +20,7 @@ finally: print("loaded modules & files")
 
 
 
-def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
+def menu(printdef: str, clear: bool, redb: bool):
         
         system_name = os.name
         multiQ = False
@@ -28,24 +28,24 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
         if printdef: print(printdef)
         else: pass
 
-        if clear: vars().clear() #clear all variables
+        if clear: vars().clear()
         else: pass
 
         if redb:
             try:
-                #default connection with database
+                # default connection with database
                 client = pymongo.MongoClient("mongodb+srv://vscode:KCHZ2YJPx5qsjLJs@cluster4pyfernet.mutcgi3.mongodb.net/")
                 keys_db = client["keys"]
             finally: print("connected to default database, custom db is recommended")
         else: pass
 
 
-        #access the id through here so I get no UnboundLocalError
+        # access the id through here so I get no UnboundLocalError
         with open("last_id.txt", "r") as f:
             id_num = f.read()
 
         while True:
-            if multiQ == True: #to make the user know whether they're on multifernet encryption mode or not
+            if multiQ == True:
                 command: str = input("multi.cmd->\t")
             else: command: str = input("cmd->\t")
 
@@ -62,13 +62,13 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                 try: file
                 except UnboundLocalError as e: print("no file on this session, use '/new'"), logger.logging.error(e) 
 
-                keys_collection = keys_db[str(id_num)] #set collection
+                keys_collection = keys_db[str(id_num)]
                 collections = keys_db.list_collection_names()
 
 
-                for collection in collections: #check every collection within the db
+                for collection in collections:
                     keys_collection_indent = keys_db[str(collection)]
-                    if keys_collection_indent.find_one({"file": file}) != None: #only new files that arent in the db will continue
+                    if keys_collection_indent.find_one({"file": file}) != None: # only new files that arent in the db will continue
                         menu(f"key already exists for {file}", False, False)
                     
                     else: continue
@@ -158,9 +158,9 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                 exit("bai")
         
             elif command == "/decrypt":
-                keys_collection = keys_db[str(id_num)] #set collection
+                keys_collection = keys_db[str(id_num)]
 
-                #check if key has been setted or not, now longer needs to input keys every time you decrypt a file
+                # check if key has been setted or not, no longer needs to input keys every time you decrypt a file
                 if KEY:
                     key_inp = KEY
                 else:
@@ -174,7 +174,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                 else:
                     pass
                 try:
-                    f = Fernet(key_inp) #THIS COULD CAUSE AN ERROR, WATCH!!
+                    f = Fernet(key_inp) # THIS COULD CAUSE AN ERROR, WATCH!!
                     with open(file, "rb") as encrypted_f:
                         encrypted = encrypted_f.read()
                     
@@ -186,7 +186,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                     print(f"succesfully decripted {file}")
                     logger.logging.info(f"{file} decrypted")
 
-                    #delete from the db
+                    # delete from the db
                     keys_collection.delete_one({"name": id_num})
                 except InvalidToken as e: print("invalid token"), logger.logging.error(str(e))
                 
@@ -206,40 +206,38 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
 
                 except UnboundLocalError as e: print("no key generated during this sesion"), logger.logging.error(e)
             
-            elif command == "/save": #will only store the last change made into both "file" and "key" variables
+            elif command == "/save": # will only store the last change made into both "file" and "key" variables
                 try:
-                    #append key tuple
                     with open("STORAGE/storage_listKEY.py", "a") as f:
-                        #check if it has the key in bytes or if the user just setted it, so it's not on bytes so it needs no decode
+                        # check if it has the key in bytes or if the user just setted it, so it's not on bytes hence it needs no decode
                         if multiQ:
                             if genkey_checkpoint:
                                 forloop_detect_save = False
-                                f.write(", [") #determinates the start of the list
+                                f.write(", [") # determinates the start of the list
                                 for element in decoded_key:
                                     if forloop_detect_save:
                                         f.write(f", '{str(element)}'")
                                     else:
                                         f.write(f"'{str(element)}'")
                                         forloop_detect_save = True
-                                f.write("]") #determinates the end of the list
+                                f.write("]") # determinates the end of the list
                                 
                             elif not genkey_checkpoint:
                                 forloop_detect_save = False
-                                f.write(", [") #determinates the start of the list
+                                f.write(", [") # ^
                                 for element in KEY:
                                     if forloop_detect_save:
                                         f.write(f", '{str(element)}'")
                                     else:
                                         f.write(f"'{str(element)}'")
                                         forloop_detect_save = True
-                                f.write("]") #determinates the end of the list
+                                f.write("]") # ^
                         else:
                             if genkey_checkpoint:
                                 f.write(f", '{decoded_key}'")
                             elif not genkey_checkpoint:
                                 f.write(f", '{KEY}'")  
                         
-                    #append file tuple
                     with open("STORAGE/storage_listFILE.py", "a") as f:
                         f.write(f", '{file}'")
 
@@ -251,13 +249,13 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                 pytojson.start(True)
 
             elif command == "/destroydict":
-                #running the bash script to clear x,y files
+                # running the bash script to clear x,y files
                 if system_name == "nt":
                     subprocess.run(["truncate -s 0 STORAGE/storage_listFILE.py && truncate -s 0 STORAGE/storage_listKEY.py"])
                 elif system_name == "posix":
                     subprocess.run(["sudo  truncate -s 0 STORAGE/storage_listFILE.py && truncate -s 0 STORAGE/storage_listKEY.py"])
                 
-                #rewrite to place "N" on the lists to avoid errors while appending values & place the variable again
+                # rewrite to place "N" on the lists to avoid errors while appending values & place the variable again
                 with open("STORAGE/storage_listFILE.py", "w") as f:
                     f.write("filetuple = 'N'")
 
@@ -268,7 +266,6 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
 
             elif command == "/delvars":
                 menu("deleting variable storage..",  True, True)
-                #fix some errors
 
             elif command == "/changedir":
                 file_moving.start()
@@ -297,7 +294,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                 else:
                     ask_key = input("set the key: \n")
 
-                #check if the key is in db
+                # check if the key is in db
                 collections = keys_db.list_collection_names()
 
                 for collection in collections:
@@ -320,24 +317,23 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                 except UnboundLocalError as e: print("no key specified"), logger.logging.error(e)
 
             elif command == "/tojson":
-                #converts the dictionary stored in the storage directory to json file
+                # converts the dictionary stored in the storage directory to json file
                 print("json file will get stored in: " + os.getcwd())
 
-                #destroys last file and rewrites to avoid errors
+                # destroys last file and rewrites to avoid errors
                 subprocess.run(["rm", "storage.json"])
 
-                pytojson.start(False) #to update the new conent into the storage variable
+                pytojson.start(False) # to update the new conent into the storage variable
 
                 with open("storage.json", "w") as f:
                     json.dump(pytojson.storage, f, indent=2)
 
-            elif command == "/jsonformat": menu("under construction", False, False)#change the json formatting
+            elif command == "/jsonformat": menu("under development", False, False) #change the json formatting
 
             elif command == "/relogs":
                 try:
-                    #destroy logs witht he ultimate power of god (aka bash)
                     subprocess.run(["rm", "LOGS/logs.log"])
-                    #then create it back but empty
+
                     with open("LOGS/logs.log", "x") as f:
                         f.write("")
 
@@ -348,14 +344,16 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
 
             elif command == "/multi -s":
                 multiQ = True
-                #the main idea is to make a multifernet mode that activates running /multi -s command, when activated, most commands will be modified to work
-                #using multifernet
+
+                # NOTE:
+                # the main idea is to make a multifernet mode that activates running /multi -s command, when activated, most commands will be modified to work
+                # using multifernet
             
             elif command == "/multi -q":
                 multiQ = False
 
             elif command == "/decrypt -t":
-                #same as /decrypt but with the at_time function
+                # same as /decrypt but with the at_time function
                 if KEY:
                     key_inp = KEY
                 else:
@@ -370,7 +368,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                         logger.logging.info(f"{file}'s key will be functional until {decrypt_when} sec.")
                 
             elif command == "/encrypt -t":
-                #same as /encrypt but with the at_time function
+                # same as /encrypt but with the at_time function
                 if multiQ:
                     menu("this feature has not been tested in multifernet yet", False, False)
                 else:
@@ -388,7 +386,8 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
                     searched_collection = keys_db[set_db]
                     for doc in searched_collection.find():
                         print(doc)
-                #NOTE: Make it so that it also gets a different, safe unique identifier for the person who saved it on the db (add a specific value to the doc that only the file owner has/knows)
+                # (possibly obsolete by now, ignore down comment)
+                # NOTE: Make it so that it also gets a different, safe unique identifier for the person who saved it on the db (add a specific value to the doc that only the file owner has/knows)
 
             elif command == "/connect mongodb":
                 try: open("dbsettings.json")
@@ -496,7 +495,7 @@ def menu(printdef: str, clear: bool, redb: bool): #PRINTDEF=NONE FOR NO PRINT
 print("||fernet||\ntry \"/new\" command first to select a file")
  # automatically set to false
 
- #unique sesion identifier
+ # unique sesion identifier
 id_num = randrange(0, 1000000000)
 with open("last_id.txt", "r") as f:
     last_id = f.read()
@@ -505,7 +504,7 @@ with open("last_id.txt", "w") as f:
 
 if current_id == last_id:
     subprocess.run(["rm", "last_id"])
-#if taken
+# if taken
 try:
     while current_id == last_id:
         id_num = randrange(0, 1000000000)

@@ -1,8 +1,8 @@
 import logging
 import os
 
-#debug config
+# debug config
 logging.basicConfig(filename="LOGS/logs.log", level=logging.DEBUG, format=" %(levelname)s, %(filename)s , %(asctime)s, %(message)s")
 
-#info config
+# info config
 logging.basicConfig(filename="LOGS/logs.log", level=logging.INFO, format=" %(levelname)s, %(filename)s , %(asctime)s, %(message)s")

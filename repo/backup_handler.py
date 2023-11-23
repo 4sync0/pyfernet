@@ -2,12 +2,11 @@ import shutil
 import os
 import subprocess
 
-#files that gets saved regardless of there being an update
+# files that gets saved regardless of there being an update
 truetxt = False
 storagejson = False
 logslog = False
 
-#home path
 home = os.path.expanduser("~")
 
 
@@ -26,19 +25,18 @@ if input("do you want to save the logs? (.../pyfernet/LOGS/logs.log)\t y/n \n") 
 else:
     pass
 
-#True = save ; False = No save
+# True = save ; False = No save
 
 print(f"""will be saved:\n
  true.txt: {truetxt}
  storage.json: {storagejson}
  logs.log {logslog}\n""")
 
-#confirmation
 confirm = input("Do you want to proceed with the update?\t y/n \n")
 
 if confirm == "y":
     try:
-        #save everything on the content folder
+        # save everything on the content folder & put it in home directory
         if storagejson: shutil.move("storage.json", "repo/content")
         else: pass
 
@@ -48,16 +46,14 @@ if confirm == "y":
         if logslog: shutil.move("LOGS/logs.log", "repo/content")
         else: pass
 
-        #& put it on the home directory
-        #works for windows, linxu and macos
+
         shutil.move("repo", home)
 
     finally:
-        #get lastest
+        # get lastest
         subprocess.run(["git", "pull", "https://github.com/Party-Pie/pyfernet"])
 
-        #delete the new ones (only the ones that are already on the repo)
-        #then put back
+        # delete the new ones (only the ones that are already on the repo) & put files back
         if storagejson:
             os.remove("true.txt")
             shutil.move(f"{home}/content/storage.json", {os.getcwd()})
@@ -75,4 +71,4 @@ if confirm == "y":
 else:
     print("update cancelled")
 
-#THIS IS CURRENTLY UNDER TESTS
+# THIS IS CURRENTLY UNDER TESTS
