@@ -85,4 +85,4 @@ But first, there are some things you need to **take into account**:
 <br>
 <sup>That'd be all for now, appreciate taking your time in reading this</sup>
   
-Made with love, by PartyPie
+Made with love, by some random guy on the internet.
