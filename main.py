@@ -41,7 +41,7 @@ if __name__ == "__main__":
         # repo info
         try: open("true.txt")
         except Exception:
-            comms = requests.get("https://api.github.com/repos/Party-Pie/pyfernet/commits") 
+            comms = requests.get("https://api.github.com/repos/4sync0/pyfernet/commits") 
 
             data = comms.json()
 

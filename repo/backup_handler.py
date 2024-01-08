@@ -51,7 +51,7 @@ if confirm == "y":
 
     finally:
         # get lastest
-        subprocess.run(["git", "pull", "https://github.com/Party-Pie/pyfernet"])
+        subprocess.run(["git", "pull", "https://github.com/4sync0/pyfernet"])
 
         # delete the new ones (only the ones that are already on the repo) & put files back
         if storagejson:

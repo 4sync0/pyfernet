@@ -6,7 +6,7 @@ from LOGS import logs_setup as logger
 # I am aware there are easies ways of doing these type of stuff, but for the sake of "training" Im doing it this way
 
 # get api, data and specific commit
-comms = r.get("https://api.github.com/repos/Party-Pie/pyfernet/commits") 
+comms = r.get("https://api.github.com/repos/4sync0/pyfernet/commits") 
 
 data = comms.json()
 
