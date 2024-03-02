@@ -12,8 +12,7 @@ But for now that's all we have, it should work fine on windows and unix (see [b-
 
 ![fernet encryption jpg](https://cdn.pixabay.com/photo/2015/12/13/15/32/cryptographic-1091257_960_720.jpg)  
 <br>
-![maintained badge](https://img.shields.io/maintenance/yes/2023?logo=github&logoColor=gold)
-![last-commit badge](https://img.shields.io/github/last-commit/Party-Pie/pyfernet?color=gold&logo=github&logoColor=gold)
+![last-commit badge](https://img.shields.io/github/last-commit/4sync0/pyfernet?color=gold&logo=github&logoColor=gold)
 ![discord badge](https://img.shields.io/badge/discord-P4rtyPi5%236988-gold?logo=discord)
 ![build badge](https://img.shields.io/appveyor/build/Party-Pie/pyfernet?color=gold&label=build&logo=AppVeyor&logoColor=yellow)
 <br>
