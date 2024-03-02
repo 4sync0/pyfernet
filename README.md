@@ -14,7 +14,7 @@ But for now that's all we have, it should work fine on windows and unix (see [b-
 <br>
 ![last-commit badge](https://img.shields.io/github/last-commit/4sync0/pyfernet?color=gold&logo=github&logoColor=gold)
 ![discord badge](https://img.shields.io/badge/discord-P4rtyPi5%236988-gold?logo=discord)
-![build badge](https://img.shields.io/appveyor/build/Party-Pie/pyfernet?color=gold&label=build&logo=AppVeyor&logoColor=yellow)
+![build badge](https://ci.appveyor.com/api/projects/status/x6l1mhwgbqllacxj?svg=true)
 <br>
 <br>
 ## What's all this?  
