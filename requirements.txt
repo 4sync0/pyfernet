@@ -1,4 +1,4 @@
-cryptography==41.0.2
+cryptography==42.0.5
 requests==2.31.0
 pymongo==4.4.0  
 mysql-connector-python==8.0.33
