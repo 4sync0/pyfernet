@@ -1,6 +1,7 @@
 __pycache__/
 .vscode
-
+Dockerfile
+docker-compose.yml
 # generated files by pyfernet
 *FERNETKEY*
 true.txt
