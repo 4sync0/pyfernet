@@ -151,6 +151,7 @@ def menu(printdef: str, clear: bool, redb: bool):
                     print("\nsuccesfully encripted: ",file)
                     logger.logging.info(f"{file} encrypted")
 
+                except PermissionError as e: print("lack of privileges to modify the file. Try executing pyfernet with the necessary perms"), logger.logging.error(e)
                 except ValueError as e: print("invalid key"), logger.logging.error(e)
                 except UnboundLocalError as e: print("no key generated or specified"), logger.logging.error(e)
         
